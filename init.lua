@@ -1,37 +1,41 @@
-dofile_once("mods/noita-mod-template/files/scripts/lib/utilities.lua")
+local VALUES = dofile_once("mods/mystery-spells-and-perks/files/scripts/variables.lua")
+dofile_once("mods/mystery-spells-and-perks/files/scripts/lib/utilities.lua")
 
-print("noita-mod-template load")
+print("mystery-spells-and-perks load")
+
+ModLuaFileAppend("data/scripts/gun/gun_actions.lua",
+  "mods/mystery-spells-and-perks/files/scripts/append/gun_actions.lua")
+ModLuaFileAppend("data/scripts/perks/perk_list.lua",
+  "mods/mystery-spells-and-perks/files/scripts/append/perk_list.lua")
 
 function OnModPreInit()
-	print("Mod - OnModPreInit()") -- First this is called for all mods
 end
 
 function OnModInit()
-	print("Mod - OnModInit()") -- After that this is called for all mods
 end
 
 function OnModPostInit()
-	print("Mod - OnModPostInit()") -- Then this is called for all mods
 end
 
-function OnPlayerSpawned( player_entity ) -- This runs when player entity has been created
-	GamePrint( "OnPlayerSpawned() - Player entity id: " .. tostring(player_entity) )
+function OnWorldInitialized()
+  GameAddFlagRun(VALUES.IS_GAME_START)
 end
 
-function OnWorldInitialized() -- This is called once the game world is initialized. Doesn't ensure any world chunks actually exist. Use OnPlayerSpawned to ensure the chunks around player have been loaded or created.
-	GamePrint( "OnWorldInitialized() " .. tostring(GameGetFrameNum()) )
+function OnPlayerSpawned(player_entity)
 end
 
-function OnWorldPreUpdate() -- This is called every time the game is about to start updating the world
-	GamePrint( "Pre-update hook " .. tostring(GameGetFrameNum()) )
+function OnWorldPreUpdate()
 end
 
 function OnWorldPostUpdate() -- This is called every time the game has finished updating the world
-	GamePrint( "Post-update hook " .. tostring(GameGetFrameNum()) )
 end
 
-function OnMagicNumbersAndWorldSeedInitialized() -- this is the last point where the Mod* API is available. after this materials.xml will be loaded.
-	print( "===================================== random " .. tostring(x) )
+function OnMagicNumbersAndWorldSeedInitialized()
 end
 
-print("noita-mod-template loaded")
+local content = ModTextFileGetContent("data/translations/common.csv")
+local mystery_spells_and_perks_content = ModTextFileGetContent(
+  "mods/mystery-spells-and-perks/files/translations/common.csv")
+ModTextFileSetContent("data/translations/common.csv", content .. mystery_spells_and_perks_content)
+
+print("mystery-spells-and-perks loaded")
