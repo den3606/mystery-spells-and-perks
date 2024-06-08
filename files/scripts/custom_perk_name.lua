@@ -101,7 +101,7 @@ local names = {
   "$perk_mystery_stone_perk", }
 
 local function get()
-  return names[Random(0, #names)]
+  return names[Random(1, #names)]
 end
 
 return {

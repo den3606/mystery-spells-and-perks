@@ -71,12 +71,128 @@ local names = {
   "$action_mystery_decayed_wish_spell",
   "$action_mystery_well_worn_spell",
   "$action_mystery_new_spell",
-  "$action_mystery_suspicious_spell" }
+  "$action_mystery_suspicious_spell",
+  "$action_mystery_arcane_spell",
+  "$action_mystery_frozen_spell",
+  "$action_mystery_radiant_spell",
+  "$action_mystery_twilight_spell",
+  "$action_mystery_galactic_spell",
+  "$action_mystery_fiery_spell",
+  "$action_mystery_haunting_spell",
+  "$action_mystery_infernal_spell",
+  "$action_mystery_luminous_spell",
+  "$action_mystery_gloom_spell",
+  "$action_mystery_serene_spell",
+  "$action_mystery_hallowed_spell",
+  "$action_mystery_ethereal_spell",
+  "$action_mystery_turbulent_spell",
+  "$action_mystery_harmonic_spell",
+  "$action_mystery_celestial_spell",
+  "$action_mystery_transcendent_spell",
+  "$action_mystery_vortex_spell",
+  "$action_mystery_rift_spell",
+  "$action_mystery_zephyr_spell",
+  "$action_mystery_voidwalker_spell",
+  "$action_mystery_chilling_spell",
+  "$action_mystery_radiance_spell",
+  "$action_mystery_lunar_spell",
+  "$action_mystery_solar_spell",
+  "$action_mystery_storm_spell",
+  "$action_mystery_moonlit_spell",
+  "$action_mystery_whispering_spell",
+  "$action_mystery_spectral_spell",
+  "$action_mystery_tidal_spell",
+  "$action_mystery_echoing_spell",
+  "$action_mystery_aurora_spell",
+  "$action_mystery_stormcloud_spell",
+  "$action_mystery_tremor_spell",
+  "$action_mystery_pyroclastic_spell",
+  "$action_mystery_dusk_spell",
+  "$action_mystery_dawn_spell",
+  "$action_mystery_charm_spell",
+  "$action_mystery_boundless_spell",
+  "$action_mystery_arcana_spell",
+  "$action_mystery_petrify_spell",
+  "$action_mystery_curse_spell",
+  "$action_mystery_potion_spell",
+  "$action_mystery_incantation_spell",
+  "$action_mystery_omen_spell",
+  "$action_mystery_divination_spell",
+  "$action_mystery_seer_spell",
+  "$action_mystery_clairvoyance_spell",
+  "$action_mystery_prophecy_spell",
+  "$action_mystery_fortune_spell",
+  "$action_mystery_retribution_spell",
+  "$action_mystery_summon_spell",
+  "$action_mystery_binding_spell",
+  "$action_mystery_evocation_spell",
+  "$action_mystery_conjuration_spell",
+  "$action_mystery_enchantment_spell",
+  "$action_mystery_illusion_spell",
+  "$action_mystery_banishment_spell",
+  "$action_mystery_transformation_spell",
+  "$action_mystery_metamorphosis_spell",
+  "$action_mystery_alteration_spell",
+  "$action_mystery_augmentation_spell",
+  "$action_mystery_flaming_spell",
+  "$action_mystery_scorching_spell",
+  "$action_mystery_freezing_spell",
+  "$action_mystery_shocking_spell",
+  "$action_mystery_jolting_spell",
+  "$action_mystery_mystifying_spell",
+  "$action_mystery_obfuscating_spell",
+  "$action_mystery_shadow_spell",
+  "$action_mystery_umbra_spell",
+  "$action_mystery_penumbra_spell",
+  "$action_mystery_solar_flare_spell",
+  "$action_mystery_moonbeam_spell",
+  "$action_mystery_stellar_spell",
+  "$action_mystery_cosmic_spell",
+  "$action_mystery_supernova_spell",
+  "$action_mystery_nebula_spell",
+  "$action_mystery_warp_spell",
+  "$action_mystery_distortion_spell",
+  "$action_mystery_hallucination_spell",
+  "$action_mystery_fade_spell",
+  "$action_mystery_vanish_spell",
+  "$action_mystery_eruption_spell",
+  "$action_mystery_cataclysm_spell",
+  "$action_mystery_volcano_spell",
+  "$action_mystery_earthquake_spell",
+  "$action_mystery_tsunami_spell",
+  "$action_mystery_tornado_spell",
+  "$action_mystery_hurricane_spell",
+  "$action_mystery_cyclone_spell",
+  "$action_mystery_whirlwind_spell",
+  "$action_mystery_squall_spell",
+  "$action_mystery_blizzard_spell",
+  "$action_mystery_sleet_spell",
+  "$action_mystery_hailstorm_spell",
+  "$action_mystery_duststorm_spell",
+}
 
 local function get()
-  return names[Random(0, #names)]
+  return names[Random(1, #names)]
 end
 
 return {
   get = get,
 }
+
+-- dubug
+-- for index, value in ipairs(names) do
+--   local count = 0
+--   for index, value2 in ipairs(names) do
+--     if value == value2 then
+--       count = count + 1
+--     end
+--   end
+
+--   if count > 1 then
+--     print(value)
+--   end
+-- end
+-- local rnd = Random(1, #names)
+-- if names[rnd] == nil then
+--   print(rnd)
+-- end
