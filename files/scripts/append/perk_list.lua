@@ -1,4 +1,3 @@
-local VALUES = dofile_once("mods/mystery-spells-and-perks/files/scripts/variables.lua")
 local custom_name = dofile_once("mods/mystery-spells-and-perks/files/scripts/custom_perk_name.lua")
 
 local secret_perk = {

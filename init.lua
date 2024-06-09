@@ -3,11 +3,6 @@ dofile_once("mods/mystery-spells-and-perks/files/scripts/lib/utilities.lua")
 
 print("mystery-spells-and-perks load")
 
-ModLuaFileAppend("data/scripts/gun/gun_actions.lua",
-  "mods/mystery-spells-and-perks/files/scripts/append/gun_actions.lua")
-ModLuaFileAppend("data/scripts/perks/perk_list.lua",
-  "mods/mystery-spells-and-perks/files/scripts/append/perk_list.lua")
-
 function OnModPreInit()
 end
 
@@ -15,6 +10,28 @@ function OnModInit()
 end
 
 function OnModPostInit()
+  local nxml = dofile_once("mods/mystery-spells-and-perks/files/scripts/lib/luanxml/nxml.lua")
+  dofile_once('data/scripts/gun/gun_actions.lua')
+  for index, action in ipairs(actions) do
+    if action.custom_xml_file then
+      local xml = ModTextFileGetContent(action.custom_xml_file)
+      local xml_element = nxml.parse(xml)
+
+      xml_element:add_child(nxml.new_element("LuaComponent",
+        {
+          script_source_file = "mods/mystery-spells-and-perks/files/scripts/rename_custom_card.lua",
+          execute_on_added = "1",
+          execute_every_n_frame = "-1",
+          execute_times = "1"
+        }))
+      ModTextFileSetContent(action.custom_xml_file, tostring(xml_element))
+    end
+  end
+
+  ModLuaFileAppend("data/scripts/gun/gun_actions.lua",
+    "mods/mystery-spells-and-perks/files/scripts/append/gun_actions.lua")
+  ModLuaFileAppend("data/scripts/perks/perk_list.lua",
+    "mods/mystery-spells-and-perks/files/scripts/append/perk_list.lua")
 end
 
 function OnWorldInitialized()

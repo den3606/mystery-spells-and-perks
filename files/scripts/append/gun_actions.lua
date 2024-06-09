@@ -21,19 +21,19 @@ for i = 1, #actions do
   actions[i].sprite = secret_spell.sprite
   actions[i].name = custom_name.get()
   actions[i].description = secret_spell.description
-  actions[i].type = (function()
-    if GameHasFlagRun(VALUES.IS_GAME_START) then
-      return original_type
-    else
-      return secret_spell.type
-    end
-  end)()
+  -- NOTE:Typeも隠すと、杖生成のときにタイプで判断しているのでスペルが取得できなくなる
+  -- actions[i].type = (function()
+  --   if GameHasFlagRun(VALUES.IS_GAME_START) then
+  --     return original_type
+  --   else
+  --     return secret_spell.type
+  --   end
+  -- end)()
   actions[i].action = function()
     if GameHasFlagRun(VALUES.IS_GAME_START) then
       actions[i].original_action()
     end
   end
-
   -- TODO: Option
   -- actions[i].mana = secret_spell.mana
 end
