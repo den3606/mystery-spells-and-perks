@@ -14,10 +14,9 @@ local secret_spell = {
 }
 
 for i = 1, #actions do
-  local original_action = actions[i].action
-  local original_type = actions[i].type
+  local original_sprite = actions[i].sprite
 
-  actions[i].original_action = original_action
+  actions[i].original_sprite = original_sprite
   actions[i].sprite = secret_spell.sprite
   actions[i].name = custom_name.get()
   actions[i].description = secret_spell.description

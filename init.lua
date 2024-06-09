@@ -3,11 +3,10 @@ dofile_once("mods/mystery-spells-and-perks/files/scripts/lib/utilities.lua")
 
 print("mystery-spells-and-perks load")
 
-function OnModPreInit()
-end
-
-function OnModInit()
-end
+local gui = gui or GuiCreate()
+-- TODO: dofile_onceに書き換えること
+local name_editor = dofile(
+  "mods/mystery-spells-and-perks/files/scripts/gui/name_editor.lua")
 
 function OnModPostInit()
   local nxml = dofile_once("mods/mystery-spells-and-perks/files/scripts/lib/luanxml/nxml.lua")
@@ -38,16 +37,8 @@ function OnWorldInitialized()
   GameAddFlagRun(VALUES.IS_GAME_START)
 end
 
-function OnPlayerSpawned(player_entity)
-end
-
-function OnWorldPreUpdate()
-end
-
-function OnWorldPostUpdate() -- This is called every time the game has finished updating the world
-end
-
-function OnMagicNumbersAndWorldSeedInitialized()
+function OnWorldPostUpdate()
+  name_editor.draw(gui)
 end
 
 local content = ModTextFileGetContent("data/translations/common.csv")
