@@ -1,5 +1,4 @@
 local VALUES = dofile_once("mods/mystery-spells-and-perks/files/scripts/variables.lua")
-local Json = dofile_once("mods/mystery-spells-and-perks/files/scripts/lib/jsonlua/json.lua")
 
 local function string_to_number(str)
   local num = 0
