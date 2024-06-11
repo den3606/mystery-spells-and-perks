@@ -1,4 +1,5 @@
 local VALUES = dofile_once("mods/mystery-spells-and-perks/files/scripts/variables.lua")
+local Json = dofile_once("mods/mystery-spells-and-perks/files/scripts/lib/jsonlua/json.lua")
 
 local function string_to_number(str)
   local num = 0
@@ -9,14 +10,24 @@ local function string_to_number(str)
   return num
 end
 
-local function new_id()
-  local global_gui_id = tonumber(ModSettingGet(VALUES.GLOBAL_GUI_ID_KEY)) or 0
+
+local keys = {}
+
+local function new_id(key)
+  if keys[key] ~= nil then
+    return keys[key]
+  end
+
+  local global_gui_id = tonumber(ModSettingGet(VALUES.GLOBAL_GUI_ID)) or 0
   if global_gui_id == 0 then
     global_gui_id = string_to_number(VALUES.MOD_NAME)
   end
 
+  keys[key] = global_gui_id
   global_gui_id = global_gui_id + 1
-  ModSettingSet(VALUES.GLOBAL_GUI_ID_KEY, tostring(global_gui_id))
+
+  ModSettingSet(VALUES.GLOBAL_GUI_ID, tostring(global_gui_id))
+
   return global_gui_id
 end
 

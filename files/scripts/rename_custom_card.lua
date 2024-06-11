@@ -12,6 +12,7 @@ if not action_id then
   return
 end
 
+-- TODO:ここで更新リストを読み込んで、新しくスポーンしたEntiyを書き換える
 dofile_once('data/scripts/gun/gun_actions.lua')
 for index, action in ipairs(actions) do
   if action.name then
