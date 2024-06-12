@@ -11,7 +11,7 @@ end
 
 
 local keys = {}
-
+-- TODO: USE GuiIdPush
 local function new_id(key)
   if keys[key] ~= nil then
     return keys[key]
@@ -19,7 +19,7 @@ local function new_id(key)
 
   local global_gui_id = tonumber(ModSettingGet(VALUES.GLOBAL_GUI_ID)) or 0
   if global_gui_id == 0 then
-    global_gui_id = string_to_number(VALUES.MOD_NAME)
+    global_gui_id = string_to_number(VALUES.MOD_NAME) + 5000
   end
 
   keys[key] = global_gui_id

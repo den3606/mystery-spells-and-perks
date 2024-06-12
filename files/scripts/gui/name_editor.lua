@@ -99,7 +99,8 @@ local function draw_spell_picker(gui)
             customized_action.name = action.name
             customized_action.sprite = action.sprite
             customized_action.description = action.description
-            GlobalsSetValue(VALUES.GLOBAL_SPELL_PREFIX_KEY .. customized_actions.id,
+            print('set: ' .. VALUES.GLOBAL_SPELL_PREFIX_KEY .. customized_action.id)
+            GlobalsSetValue(VALUES.GLOBAL_SPELL_PREFIX_KEY .. customized_action.id,
               Json.encode(customized_action))
           end
         end
