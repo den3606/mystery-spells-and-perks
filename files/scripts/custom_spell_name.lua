@@ -178,21 +178,3 @@ end
 return {
   get = get,
 }
-
--- dubug
--- for index, value in ipairs(names) do
---   local count = 0
---   for index, value2 in ipairs(names) do
---     if value == value2 then
---       count = count + 1
---     end
---   end
-
---   if count > 1 then
---     print(value)
---   end
--- end
--- local rnd = Random(1, #names)
--- if names[rnd] == nil then
---   print(rnd)
--- end

@@ -1,7 +1,8 @@
-# Noita MOD Template
+![preview_image](./workshop_preview_image.png)
 
-NoitaMOD 制作用のテンプレートリポジトリです。
-`mystery-spells-and-perks`を開発 MOD 名に変更してください。
+# Mystery Spells And Perks
+
+呪文と特典がシークレットになるMODです。
 
 ## LICENSE
 

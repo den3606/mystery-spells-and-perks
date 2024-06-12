@@ -1,3 +1,9 @@
+local mystify_perks = ModSettingGet('mystery_spells_and_perks.mystify_perks') or false
+
+if not mystify_perks then
+  return
+end
+
 local custom_name = dofile_once("mods/mystery-spells-and-perks/files/scripts/custom_perk_name.lua")
 
 local secret_perk = {

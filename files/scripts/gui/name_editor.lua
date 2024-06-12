@@ -96,10 +96,7 @@ local function draw_spell_picker(gui)
         -- カスタマイズリストを更新する
         for _, customized_action in ipairs(customized_actions) do
           if selected_owned_spell.action.id == customized_action.id then
-            customized_action.name = action.name
             customized_action.sprite = action.sprite
-            customized_action.description = action.description
-            print('set: ' .. VALUES.GLOBAL_SPELL_PREFIX_KEY .. customized_action.id)
             GlobalsSetValue(VALUES.GLOBAL_SPELL_PREFIX_KEY .. customized_action.id,
               Json.encode(customized_action))
           end
@@ -113,14 +110,6 @@ local function draw_spell_picker(gui)
           )
           local action_id = ComponentGetValue2(item_action_component_id, "action_id")
           if selected_owned_spell.action.id == action_id then
-            -- 物理判定があるスペルの名称上書き
-            local ability_component_id = EntityGetFirstComponentIncludingDisabled(
-              card_entity_id, "AbilityComponent"
-            )
-            if ability_component_id then
-              ComponentSetValue2(ability_component_id, "ui_name", action.name)
-            end
-
             -- スプライト画像書き換え
             local sprite_component_id = EntityGetFirstComponentIncludingDisabled(card_entity_id,
               "SpriteComponent",
@@ -129,12 +118,12 @@ local function draw_spell_picker(gui)
               ComponentSetValue2(sprite_component_id, "image_file", action.sprite)
             end
 
-            -- Item化時の画像/名前書き換え
-            local item_comp = EntityGetFirstComponentIncludingDisabled(card_entity_id,
-              "ItemComponent")
+            -- Item化時の画像書き換え
+            local item_comp = EntityGetFirstComponentIncludingDisabled(
+              card_entity_id, "ItemComponent"
+            )
             if item_comp ~= nil then
               ComponentSetValue2(item_comp, "ui_sprite", action.sprite)
-              ComponentSetValue2(item_comp, "item_name", action.name)
             end
           end
         end
