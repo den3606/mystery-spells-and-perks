@@ -48,16 +48,27 @@ local function __load_customized_actions_if_not_called()
     return
   end
 
-  dofile('data/scripts/gun/gun_actions.lua')
+  print('test')
 
+  dofile('data/scripts/gun/gun_actions.lua')
   for _, secret_action in ipairs(actions) do
-    local action_copy = {}
-    for key, value in pairs(secret_action) do
-      if type(value) ~= "function" then
-        action_copy[key] = value
+    -- 既にRunで登録されているかを確認する
+    local json = GlobalsGetValue(
+      VALUES.GLOBAL_SPELL_PREFIX_KEY .. secret_action.id, "{}")
+    local customized_action = Json.decode(string.gsub(json, "'", '"'))
+
+    if customized_action.id then
+      print(customized_action.id)
+      table.insert(customized_actions, customized_action)
+    else
+      local action_copy = {}
+      for key, value in pairs(secret_action) do
+        if type(value) ~= "function" then
+          action_copy[key] = value
+        end
       end
+      table.insert(customized_actions, action_copy)
     end
-    table.insert(customized_actions, action_copy)
   end
 
   load_customized_action = true
@@ -98,7 +109,7 @@ local function draw_spell_picker(gui)
           if selected_owned_spell.action.id == customized_action.id then
             customized_action.sprite = action.sprite
             GlobalsSetValue(VALUES.GLOBAL_SPELL_PREFIX_KEY .. customized_action.id,
-              Json.encode(customized_action))
+              string.gsub(Json.encode(customized_action), '"', "'"))
           end
         end
 
