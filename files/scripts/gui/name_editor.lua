@@ -48,8 +48,6 @@ local function __load_customized_actions_if_not_called()
     return
   end
 
-  print('test')
-
   dofile('data/scripts/gun/gun_actions.lua')
   for _, secret_action in ipairs(actions) do
     -- 既にRunで登録されているかを確認する
