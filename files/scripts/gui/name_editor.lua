@@ -256,9 +256,7 @@ local function get_owned_spell_entity_ids(player_entity_id)
 end
 
 local function update_card_by_wand_fire()
-  local auto_setting = ModSettingGet('mystery_spells_and_perks.automatic_memo_type')
-
-  for action_type_num, actions_by_type in pairs(original_actions_by_types) do
+  for _, actions_by_type in pairs(original_actions_by_types) do
     for _, action in ipairs(actions_by_type) do
       if GlobalsGetValue(VALUES.GLOBAL_WAND_FIREED_SPELL_PREFIX_KEY .. action.id, "false") == "true" then
         for _, customized_action in ipairs(customized_actions) do
@@ -268,10 +266,6 @@ local function update_card_by_wand_fire()
           end
         end
       end
-    end
-
-    if auto_setting == "only_spells" and action_type_num == ACTION_TYPE_PROJECTILE then
-      return
     end
   end
 end

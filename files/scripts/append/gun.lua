@@ -12,15 +12,59 @@ local original_play_action = play_action
 function play_action(action)
   original_play_action(action)
 
-  local auto_setting = ModSettingGet('mystery_spells_and_perks.automatic_memo_type')
-  if auto_setting == "only_spells" then
-    if action.type == ACTION_TYPE_PROJECTILE then
-      GlobalsSetValue(VALUES.GLOBAL_WAND_FIREED_SPELL_PREFIX_KEY .. action.id, "true")
-      return
-    end
-  end
+  local automatic_memo_projectile = ModSettingGet(
+    'mystery_spells_and_perks.automatic_memo_projectile') or false
+  local automatic_memo_static_projectile = ModSettingGet(
+    'mystery_spells_and_perks.automatic_memo_static_projectile') or false
+  local automatic_memo_modifier = ModSettingGet('mystery_spells_and_perks.automatic_memo_modifier') or
+      false
+  local automatic_memo_draw_many = ModSettingGet('mystery_spells_and_perks.automatic_memo_draw_many') or
+      false
+  local automatic_memo_material = ModSettingGet('mystery_spells_and_perks.automatic_memo_material') or
+      false
+  local automatic_memo_other = ModSettingGet('mystery_spells_and_perks.automatic_memo_other') or
+      false
+  local automatic_memo_utility = ModSettingGet('mystery_spells_and_perks.automatic_memo_utility') or
+      false
+  local automatic_memo_passive = ModSettingGet('mystery_spells_and_perks.automatic_memo_passive') or
+      false
 
-  if auto_setting == "all" then
-    GlobalsSetValue(VALUES.GLOBAL_WAND_FIREED_SPELL_PREFIX_KEY .. action.id, "true")
+  local need_automatic_memo_list = {
+    automatic_memo_projectile,
+    automatic_memo_static_projectile,
+    automatic_memo_modifier,
+    automatic_memo_draw_many,
+    automatic_memo_material,
+    automatic_memo_other,
+    automatic_memo_utility,
+    automatic_memo_passive,
+  }
+
+  for i = 1, #need_automatic_memo_list, 1 do
+    local action_type_num = i - 1
+    if action_type_num == action.type and need_automatic_memo_list[i] then
+      GlobalsSetValue(VALUES.GLOBAL_WAND_FIREED_SPELL_PREFIX_KEY .. action.id, "true")
+    end
+    if action_type_num == action.type and need_automatic_memo_list[i] then
+      GlobalsSetValue(VALUES.GLOBAL_WAND_FIREED_SPELL_PREFIX_KEY .. action.id, "true")
+    end
+    if action_type_num == action.type and need_automatic_memo_list[i] then
+      GlobalsSetValue(VALUES.GLOBAL_WAND_FIREED_SPELL_PREFIX_KEY .. action.id, "true")
+    end
+    if action_type_num == action.type and need_automatic_memo_list[i] then
+      GlobalsSetValue(VALUES.GLOBAL_WAND_FIREED_SPELL_PREFIX_KEY .. action.id, "true")
+    end
+    if action_type_num == action.type and need_automatic_memo_list[i] then
+      GlobalsSetValue(VALUES.GLOBAL_WAND_FIREED_SPELL_PREFIX_KEY .. action.id, "true")
+    end
+    if action_type_num == action.type and need_automatic_memo_list[i] then
+      GlobalsSetValue(VALUES.GLOBAL_WAND_FIREED_SPELL_PREFIX_KEY .. action.id, "true")
+    end
+    if action_type_num == action.type and need_automatic_memo_list[i] then
+      GlobalsSetValue(VALUES.GLOBAL_WAND_FIREED_SPELL_PREFIX_KEY .. action.id, "true")
+    end
+    if action_type_num == action.type and need_automatic_memo_list[i] then
+      GlobalsSetValue(VALUES.GLOBAL_WAND_FIREED_SPELL_PREFIX_KEY .. action.id, "true")
+    end
   end
 end

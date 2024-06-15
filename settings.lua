@@ -1,14 +1,15 @@
 dofile("data/scripts/lib/mod_settings.lua") -- see this file for documentation on some of the features.
 
 local mod_id = "mystery_spells_and_perks"   -- This should match the name of your mod's folder.
-mod_settings_version = 1                    -- This is a magic global that can be used to migrate settings to new mod versions. call mod_settings_get_version() before mod_settings_update() to get the old value.
+mod_settings_version = 2                    -- This is a magic global that can be used to migrate settings to new mod versions. call mod_settings_get_version() before mod_settings_update() to get the old value.
+
 mod_settings = {
   {
     id = "mystify_perks",
     ui_name = "Park will be made into a mystery",
     ui_description = "Mystify the Parks",
     value_default = false,
-    scope = MOD_SETTING_SCOPE_NEW_GAME,
+    scope = MOD_SETTING_SCOPE_RUNTIME,
   },
   {
     category_id = "automatics",
@@ -16,13 +17,73 @@ mod_settings = {
     ui_description = "Automatically memos when a spell is triggered",
     foldable = true,
     _folded = false,
-    settings = {
+    settings =
+    {
       {
-        id = "automatic_memo_type",
-        ui_name = "Memo type",
-        value_default = "only_spells",
-        values = { { "none", "none" }, { "only_spells", "Only Spells" }, { "all", "All" } },
+        id = "automatic_memo_projectile",
+        ui_name = "Automatic Memo Projectile",
+        value_default = true,
         scope = MOD_SETTING_SCOPE_RUNTIME,
+      },
+      {
+        id = "automatic_memo_static_projectile",
+        ui_name = "Automatic Memo Static Projectile",
+        value_default = true,
+        scope = MOD_SETTING_SCOPE_RUNTIME,
+      },
+      {
+        id = "automatic_memo_modifier",
+        ui_name = "Automatic Memo Modifier",
+        value_default = false,
+        scope = MOD_SETTING_SCOPE_RUNTIME,
+      },
+      {
+        id = "automatic_memo_draw_many",
+        ui_name = "Automatic Memo Draw many",
+        value_default = false,
+        scope = MOD_SETTING_SCOPE_RUNTIME,
+      },
+      {
+        id = "automatic_memo_material",
+        ui_name = "Automatic Memo Material",
+        value_default = false,
+        scope = MOD_SETTING_SCOPE_RUNTIME,
+      },
+      {
+        id = "automatic_memo_other",
+        ui_name = "Automatic Memo Other",
+        value_default = false,
+        scope = MOD_SETTING_SCOPE_RUNTIME,
+      },
+      {
+        id = "automatic_memo_utility",
+        ui_name = "Automatic Memo Utility",
+        value_default = false,
+        scope = MOD_SETTING_SCOPE_RUNTIME,
+      },
+      {
+        id = "automatic_memo_passive",
+        ui_name = "Automatic Memo Passive",
+        value_default = true,
+        scope = MOD_SETTING_SCOPE_RUNTIME,
+      },
+      {
+        id = "space_summy",
+        ui_name = " ",
+        not_setting = true,
+      },
+      {
+        id = "automatic_memo_recommended",
+        ui_name = "Recommended setting is...\n" ..
+            "Automatic Memo Projectile => On\n" ..
+            "Automatic Memo Static Projectile => On\n" ..
+            "Automatic Memo Modifier => Off\n" ..
+            "Automatic Memo Draw many => Off\n" ..
+            "Automatic Memo Material => Off\n" ..
+            "Automatic Memo Other => Off\n" ..
+            "Automatic Memo Utility => Off\n" ..
+            "Automatic Memo Passive => On\n",
+        not_setting = true,
       },
     }
   }
