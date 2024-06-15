@@ -58,6 +58,8 @@ function OnModPostInit()
     "mods/mystery-spells-and-perks/files/scripts/append/gun_actions.lua")
   ModLuaFileAppend("data/scripts/perks/perk_list.lua",
     "mods/mystery-spells-and-perks/files/scripts/append/perk_list.lua")
+  ModLuaFileAppend("data/scripts/gun/gun.lua",
+    "mods/mystery-spells-and-perks/files/scripts/append/gun.lua")
 end
 
 function OnWorldInitialized()

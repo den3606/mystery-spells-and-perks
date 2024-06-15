@@ -1,3 +1,4 @@
+dofile_once("data/scripts/gun/gun_enums.lua")
 local VALUES = dofile_once("mods/mystery-spells-and-perks/files/scripts/variables.lua")
 local drawer = dofile_once("mods/mystery-spells-and-perks/files/scripts/gui/drawer.lua")
 local Json = dofile_once("mods/mystery-spells-and-perks/files/scripts/lib/jsonlua/json.lua")
@@ -72,6 +73,43 @@ local function __load_customized_actions_if_not_called()
   load_customized_action = true
 end
 
+local function update_card(target_action, override_action)
+  -- カスタマイズリストを更新する
+  for _, customized_action in ipairs(customized_actions) do
+    if target_action.id == customized_action.id then
+      customized_action.sprite = override_action.sprite
+      GlobalsSetValue(VALUES.GLOBAL_SPELL_PREFIX_KEY .. customized_action.id,
+        string.gsub(Json.encode(customized_action), '"', "'"))
+    end
+  end
+
+  -- フィールドにあるEntity化されたカードを更新する
+  local card_entity_ids = EntityGetWithTag("card_action")
+  for _, card_entity_id in ipairs(card_entity_ids) do
+    local item_action_component_id = EntityGetFirstComponentIncludingDisabled(
+      card_entity_id, "ItemActionComponent"
+    )
+    local entity_action_id = ComponentGetValue2(item_action_component_id, "action_id")
+    if target_action.id == entity_action_id then
+      -- スプライト画像書き換え
+      local sprite_component_id = EntityGetFirstComponentIncludingDisabled(card_entity_id,
+        "SpriteComponent",
+        "item_identified")
+      if sprite_component_id then
+        ComponentSetValue2(sprite_component_id, "image_file", override_action.sprite)
+      end
+
+      -- Item化時の画像書き換え
+      local item_comp = EntityGetFirstComponentIncludingDisabled(
+        card_entity_id, "ItemComponent"
+      )
+      if item_comp ~= nil then
+        ComponentSetValue2(item_comp, "ui_sprite", override_action.sprite)
+      end
+    end
+  end
+end
+
 
 local function draw_spell_picker(gui)
   GuiBeginScrollContainer(gui, drawer.new_id('spell_picker_gui'), 5, 5, 360, 250)
@@ -102,40 +140,7 @@ local function draw_spell_picker(gui)
 
       -- アイコンクリック時に、所持呪文が選択されている場合
       if clicked and selected_owned_spell and (is_selected_wand_spell or is_selected_bag_spell) then
-        -- カスタマイズリストを更新する
-        for _, customized_action in ipairs(customized_actions) do
-          if selected_owned_spell.action.id == customized_action.id then
-            customized_action.sprite = action.sprite
-            GlobalsSetValue(VALUES.GLOBAL_SPELL_PREFIX_KEY .. customized_action.id,
-              string.gsub(Json.encode(customized_action), '"', "'"))
-          end
-        end
-
-        -- フィールドにあるEntity化されたカードを更新する
-        local card_entity_ids = EntityGetWithTag("card_action")
-        for _, card_entity_id in ipairs(card_entity_ids) do
-          local item_action_component_id = EntityGetFirstComponentIncludingDisabled(
-            card_entity_id, "ItemActionComponent"
-          )
-          local action_id = ComponentGetValue2(item_action_component_id, "action_id")
-          if selected_owned_spell.action.id == action_id then
-            -- スプライト画像書き換え
-            local sprite_component_id = EntityGetFirstComponentIncludingDisabled(card_entity_id,
-              "SpriteComponent",
-              "item_identified")
-            if sprite_component_id then
-              ComponentSetValue2(sprite_component_id, "image_file", action.sprite)
-            end
-
-            -- Item化時の画像書き換え
-            local item_comp = EntityGetFirstComponentIncludingDisabled(
-              card_entity_id, "ItemComponent"
-            )
-            if item_comp ~= nil then
-              ComponentSetValue2(item_comp, "ui_sprite", action.sprite)
-            end
-          end
-        end
+        update_card(selected_owned_spell.action, action)
       end
 
       if ((i - 1) % 20 == 19) or i == #actions_by_type then
@@ -250,6 +255,26 @@ local function get_owned_spell_entity_ids(player_entity_id)
   return wand_spells, inventry_spells
 end
 
+local function update_card_by_wand_fire()
+  local auto_setting = ModSettingGet('mystery_spells_and_perks.automatic_memo_type')
+
+  for action_type_num, actions_by_type in pairs(original_actions_by_types) do
+    for _, action in ipairs(actions_by_type) do
+      if GlobalsGetValue(VALUES.GLOBAL_WAND_FIREED_SPELL_PREFIX_KEY .. action.id, "false") == "true" then
+        for _, customized_action in ipairs(customized_actions) do
+          if customized_action.id == action.id then
+            update_card(customized_action, action)
+            GlobalsSetValue(VALUES.GLOBAL_WAND_FIREED_SPELL_PREFIX_KEY .. action.id, "false")
+          end
+        end
+      end
+    end
+
+    if auto_setting == "only_spells" and action_type_num == ACTION_TYPE_PROJECTILE then
+      return
+    end
+  end
+end
 
 local function draw_editor(gui)
   local player_entity_id = GetPlayerEntity()
@@ -285,6 +310,8 @@ local function draw_editor(gui)
     draw_spell_picker(gui)
     GuiLayoutEnd(gui)
   end
+
+  update_card_by_wand_fire()
 end
 
 return {

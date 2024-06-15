@@ -5,11 +5,27 @@ mod_settings_version = 1                    -- This is a magic global that can b
 mod_settings = {
   {
     id = "mystify_perks",
-    ui_name = "mystify_perks",
+    ui_name = "Park will be made into a mystery",
     ui_description = "Mystify the Parks",
     value_default = false,
     scope = MOD_SETTING_SCOPE_NEW_GAME,
   },
+  {
+    category_id = "automatics",
+    ui_name = "Automatic memo",
+    ui_description = "Automatically memos when a spell is triggered",
+    foldable = true,
+    _folded = false,
+    settings = {
+      {
+        id = "automatic_memo_type",
+        ui_name = "Memo type",
+        value_default = "only_spells",
+        values = { { "none", "none" }, { "only_spells", "Only Spells" }, { "all", "All" } },
+        scope = MOD_SETTING_SCOPE_RUNTIME,
+      },
+    }
+  }
 }
 
 function ModSettingsUpdate(init_scope)
