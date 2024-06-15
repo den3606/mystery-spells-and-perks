@@ -1,6 +1,6 @@
 <Mod
 	name="mystery-spells-and-perks"
-  tags=""
+  tags="gameplay, spells, perks, game modes"
   dont_upload_folders="resources"
   dont_upload_files=".editorconfig"
 >
