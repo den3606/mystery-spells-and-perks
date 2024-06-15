@@ -8,6 +8,7 @@ mod_settings = {
     ui_name = "mystify_perks",
     ui_description = "Mystify the Parks",
     value_default = false,
+    scope = MOD_SETTING_SCOPE_NEW_GAME,
   },
 }
 
