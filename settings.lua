@@ -6,7 +6,7 @@ mod_settings_version = 2                    -- This is a magic global that can b
 mod_settings = {
   {
     id = "show_answers_when_the_game_is_cleared",
-    ui_name = "The answer will be given when the game is completed",
+    ui_name = "The answer will be given when the game is completed(Only Spells)",
     ui_description = "Hidden items are forced to be displayed",
     value_default = true,
     scope = MOD_SETTING_SCOPE_RUNTIME,
