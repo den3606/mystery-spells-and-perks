@@ -169,50 +169,52 @@ local function draw_owned_spells(gui, wand_spell_entity_ids, inventry_spell_enti
       local item_action_component_id = EntityGetFirstComponentIncludingDisabled(
         spell_entity_id, "ItemActionComponent"
       )
-      ---@diagnostic disable-next-line: param-type-mismatch
-      local action_id = ComponentGetValue2(item_action_component_id, "action_id");
 
-      -- entityをcustomized_actionへ変換する
-      local customized_action = (function()
-        for _, value in ipairs(customized_actions) do
-          if action_id == value.id then
-            return value
+      if item_action_component_id then
+        local action_id = ComponentGetValue2(item_action_component_id, "action_id");
+
+        -- entityをcustomized_actionへ変換する
+        local customized_action = (function()
+          for _, value in ipairs(customized_actions) do
+            if action_id == value.id then
+              return value
+            end
           end
-        end
-        return nil
-      end)()
+          return nil
+        end)()
 
-      if customized_action then
-        GuiLayoutBeginHorizontal(gui, 0, 0)
-        if selected_owned_spell then
-          if (
-                selected_owned_spell.title == title and
-                selected_owned_spell.index == index and
-                selected_owned_spell.action.name == customized_action.name
-              ) then
-            GuiImage(gui, drawer.new_id(
-                title .. '_selected' .. index), 0, 0,
-              "mods/mystery-spells-and-perks/files/ui_gfx/select_icon.png", 1, 1, 0
-            )
-            is_selected = true
+        if customized_action then
+          GuiLayoutBeginHorizontal(gui, 0, 0)
+          if selected_owned_spell then
+            if (
+                  selected_owned_spell.title == title and
+                  selected_owned_spell.index == index and
+                  selected_owned_spell.action.name == customized_action.name
+                ) then
+              GuiImage(gui, drawer.new_id(
+                  title .. '_selected' .. index), 0, 0,
+                "mods/mystery-spells-and-perks/files/ui_gfx/select_icon.png", 1, 1, 0
+              )
+              is_selected = true
+            end
           end
+
+          local clicked_owned_spell = GuiImageButton(
+            gui, drawer.new_id(title .. '_owned_spell_' .. index), 0, 0,
+            GameTextGetTranslatedOrNot(customized_action.name) or "", customized_action.sprite
+          )
+
+          if clicked_owned_spell then
+            selected_owned_spell = {
+              title = title,
+              index = index,
+              action = customized_action
+            }
+          end
+
+          GuiLayoutEnd(gui);
+          GuiLayoutAddVerticalSpacing(gui, 1)
         end
-
-        local clicked_owned_spell = GuiImageButton(
-          gui, drawer.new_id(title .. '_owned_spell_' .. index), 0, 0,
-          GameTextGetTranslatedOrNot(customized_action.name) or "", customized_action.sprite
-        )
-
-        if clicked_owned_spell then
-          selected_owned_spell = {
-            title = title,
-            index = index,
-            action = customized_action
-          }
-        end
-
-        GuiLayoutEnd(gui);
-        GuiLayoutAddVerticalSpacing(gui, 1)
       end
     end
     return is_selected
@@ -270,6 +272,23 @@ local function update_card_by_wand_fire()
   end
 end
 
+local function update_card_by_kolmi_kill()
+  local need_force_update = ModSettingGet(
+  "mystery_spells_and_perks.show_answers_when_the_game_is_cleared") or false
+  if need_force_update and GlobalsGetValue(VALUES.CHECK_ANSWERS, "false") == "true" then
+    for _, actions_by_type in pairs(original_actions_by_types) do
+      for _, action in ipairs(actions_by_type) do
+        for _, customized_action in ipairs(customized_actions) do
+          if customized_action.id == action.id then
+            update_card(customized_action, action)
+            GlobalsSetValue(VALUES.CHECK_ANSWERS, "false")
+          end
+        end
+      end
+    end
+  end
+end
+
 local function draw_editor(gui)
   local player_entity_id = GetPlayerEntity()
   if not player_entity_id then
@@ -306,6 +325,7 @@ local function draw_editor(gui)
   end
 
   update_card_by_wand_fire()
+  update_card_by_kolmi_kill()
 end
 
 return {
