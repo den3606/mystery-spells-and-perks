@@ -1,7 +1,7 @@
 dofile("data/scripts/lib/mod_settings.lua") -- see this file for documentation on some of the features.
 
 local mod_id = "mystery_spells_and_perks"   -- This should match the name of your mod's folder.
-mod_settings_version = 2                    -- This is a magic global that can be used to migrate settings to new mod versions. call mod_settings_get_version() before mod_settings_update() to get the old value.
+mod_settings_version = 3                    -- This is a magic global that can be used to migrate settings to new mod versions. call mod_settings_get_version() before mod_settings_update() to get the old value.
 
 mod_settings = {
   {

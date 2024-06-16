@@ -54,14 +54,23 @@ function OnModPostInit()
   ModTextFileSetContent("data/entities/misc/custom_cards/action.xml", tostring(xml_element_normal))
   ModTextFileSetContent("data/entities/base_custom_card.xml", tostring(xml_element_custom))
 
+  local kolmi = ModTextFileGetContent("data/entities/animals/boss_centipede/boss_centipede.xml")
+  local xml_element_kolmi = nxml.parse(kolmi)
+
+  xml_element_kolmi:add_child(nxml.new_element("LuaComponent",
+    {
+      script_death = "mods/mystery-spells-and-perks/files/scripts/append/kolmi_death_check.lua",
+      execute_every_n_frame = "-1",
+    }))
+  ModTextFileSetContent("data/entities/animals/boss_centipede/boss_centipede.xml",
+    tostring(xml_element_kolmi))
+
   ModLuaFileAppend("data/scripts/gun/gun_actions.lua",
     "mods/mystery-spells-and-perks/files/scripts/append/gun_actions.lua")
   ModLuaFileAppend("data/scripts/perks/perk_list.lua",
     "mods/mystery-spells-and-perks/files/scripts/append/perk_list.lua")
   ModLuaFileAppend("data/scripts/gun/gun.lua",
     "mods/mystery-spells-and-perks/files/scripts/append/gun.lua")
-  ModLuaFileAppend("data/entities/animals/boss_centipede/death_check.lua",
-    "mods/mystery-spells-and-perks/files/scripts/append/death_check.lua")
 end
 
 function OnWorldInitialized()
