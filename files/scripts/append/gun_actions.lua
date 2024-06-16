@@ -1,3 +1,9 @@
+local mystify_spells = ModSettingGet('mystery_spells_and_perks.mystify_spells') or false
+
+if not mystify_spells then
+  return
+end
+
 local VALUES = dofile_once("mods/mystery-spells-and-perks/files/scripts/variables.lua")
 local custom_name = dofile_once("mods/mystery-spells-and-perks/files/scripts/custom_spell_name.lua")
 

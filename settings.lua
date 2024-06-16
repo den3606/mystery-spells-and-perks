@@ -1,13 +1,20 @@
 dofile("data/scripts/lib/mod_settings.lua") -- see this file for documentation on some of the features.
 
 local mod_id = "mystery_spells_and_perks"   -- This should match the name of your mod's folder.
-mod_settings_version = 3                    -- This is a magic global that can be used to migrate settings to new mod versions. call mod_settings_get_version() before mod_settings_update() to get the old value.
+mod_settings_version = 4                    -- This is a magic global that can be used to migrate settings to new mod versions. call mod_settings_get_version() before mod_settings_update() to get the old value.
 
 mod_settings = {
   {
     id = "show_answers_when_the_game_is_cleared",
-    ui_name = "The answer will be given when the game is completed(Only Spells)",
+    ui_name = "The answer will be given when the game is completed",
     ui_description = "Hidden items are forced to be displayed",
+    value_default = true,
+    scope = MOD_SETTING_SCOPE_RUNTIME,
+  },
+  {
+    id = "mystify_spells",
+    ui_name = "Spell will be made into a mystery",
+    ui_description = "Mystify the Spells",
     value_default = true,
     scope = MOD_SETTING_SCOPE_RUNTIME,
   },
@@ -15,7 +22,7 @@ mod_settings = {
     id = "mystify_perks",
     ui_name = "Park will be made into a mystery",
     ui_description = "Mystify the Parks",
-    value_default = false,
+    value_default = true,
     scope = MOD_SETTING_SCOPE_RUNTIME,
   },
   {
