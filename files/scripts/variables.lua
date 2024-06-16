@@ -10,5 +10,5 @@ return {
   'mystery-spells-and-perks.global-wand-fired-spell-prefix-key.',
   NEED_UPDATE_SPELL_ENTITIES = 'mystery-spells-and-perks.need-update-spells.',
 
-  GLOBAL_PERK_PREFIX_KEY = 'mystery-spells-and-perks.global-perk-prefix-key',
+  GLOBAL_PERK_PREFIX_KEY = 'mystery-spells-and-perks.global-perk-prefix-key.',
 }
