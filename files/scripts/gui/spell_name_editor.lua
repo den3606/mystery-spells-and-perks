@@ -57,7 +57,6 @@ local function __load_customized_actions_if_not_called()
     local customized_action = Json.decode(string.gsub(json, "'", '"'))
 
     if customized_action.id then
-      print(customized_action.id)
       table.insert(customized_actions, customized_action)
     else
       local action_copy = {}
@@ -78,6 +77,7 @@ local function update_card(target_action, override_action)
   for _, customized_action in ipairs(customized_actions) do
     if target_action.id == customized_action.id then
       customized_action.sprite = override_action.sprite
+      customized_action.description = override_action.description
       GlobalsSetValue(VALUES.GLOBAL_SPELL_PREFIX_KEY .. customized_action.id,
         string.gsub(Json.encode(customized_action), '"', "'"))
     end
@@ -117,7 +117,6 @@ local function draw_spell_picker(gui)
 
   local before_type_name = nil
   local already_called_layout_end = false
-  local count = 0
   for action_type_num, actions_by_type in pairs(original_actions_by_types) do
     GuiText(gui, 0, 0, GameTextGetTranslatedOrNot(type_translate_text_keys[action_type_num]))
     GuiLayoutAddVerticalSpacing(gui, -2)
@@ -149,7 +148,6 @@ local function draw_spell_picker(gui)
       end
 
       before_type_name = current_type_name
-      count = count + 1
     end
     GuiLayoutAddVerticalSpacing(gui, 5)
   end
@@ -274,14 +272,14 @@ end
 
 local function update_card_by_kolmi_kill()
   local need_force_update = ModSettingGet(
-  "mystery_spells_and_perks.show_answers_when_the_game_is_cleared") or false
-  if need_force_update and GlobalsGetValue(VALUES.CHECK_ANSWERS, "false") == "true" then
+    "mystery_spells_and_perks.show_answers_when_the_game_is_cleared") or false
+  if need_force_update and GlobalsGetValue(VALUES.CHECK_ANSWER_SPELLS, "false") == "true" then
     for _, actions_by_type in pairs(original_actions_by_types) do
       for _, action in ipairs(actions_by_type) do
         for _, customized_action in ipairs(customized_actions) do
           if customized_action.id == action.id then
             update_card(customized_action, action)
-            GlobalsSetValue(VALUES.CHECK_ANSWERS, "false")
+            GlobalsSetValue(VALUES.CHECK_ANSWER_SPELLS, "false")
           end
         end
       end
@@ -289,7 +287,7 @@ local function update_card_by_kolmi_kill()
   end
 end
 
-local function draw_editor(gui)
+local function draw_editor(gui, editor_status)
   local player_entity_id = GetPlayerEntity()
   if not player_entity_id then
     return
@@ -302,10 +300,12 @@ local function draw_editor(gui)
     return
   end
 
-  GuiStartFrame(gui)
+  if editor_status.is_open_perk_editor then
+    show_name_editor = false
+  end
 
-  local open_pressed = GuiImageButton(gui, drawer.new_id('editor_button'), 21, 42, "",
-    "mods/mystery-spells-and-perks/files/ui_gfx/icon-16-brown.png")
+  local open_pressed = GuiImageButton(gui, drawer.new_id('spell_editor_button'), 21, 42, "",
+    "mods/mystery-spells-and-perks/files/ui_gfx/icon-16-sepll-button.png")
   local open_tooltip = "Show Spell Tag Editor"
   if (show_name_editor) then
     open_tooltip = "Hide Spell Tag Editor"
@@ -316,7 +316,7 @@ local function draw_editor(gui)
   end
 
   if show_name_editor then
-    GuiLayoutBeginHorizontal(gui, 5, 14)
+    GuiLayoutBeginHorizontal(gui, 5, 17)
     local wand_spell_entity_ids, inventry_spell_entity_ids = get_owned_spell_entity_ids(
       player_entity_id)
     draw_owned_spells(gui, wand_spell_entity_ids, inventry_spell_entity_ids)
@@ -326,6 +326,8 @@ local function draw_editor(gui)
 
   update_card_by_wand_fire()
   update_card_by_kolmi_kill()
+
+  return show_name_editor
 end
 
 return {

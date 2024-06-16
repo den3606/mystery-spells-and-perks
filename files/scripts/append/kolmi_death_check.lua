@@ -5,6 +5,7 @@ function death(damage_type_bit_field, damage_message, entity_thats_responsible, 
     "mystery_spells_and_perks.show_answers_when_the_game_is_cleared") or false
   if need_force_update then
     GamePrintImportant("$mystery_spells_and_perks.opening_up_the_mystery")
-    GlobalsSetValue(VALUES.CHECK_ANSWERS, 'true')
+    GlobalsSetValue(VALUES.CHECK_ANSWER_PERKS, 'true')
+    GlobalsSetValue(VALUES.CHECK_ANSWER_SPELLS, 'true')
   end
 end
