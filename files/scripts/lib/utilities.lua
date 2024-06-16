@@ -14,22 +14,6 @@ function Split(str, sep)
   return t
 end
 
-function ShuffleArray(array)
-  local shuffled = {}
-  for i = 1, #array do
-    shuffled[i] = array[i]
-  end
-
-  SetRandomSeed(GameGetFrameNum(), GameGetFrameNum())
-
-  for i = #shuffled, 2, -1 do
-    local j = Random(1, i)
-    shuffled[i], shuffled[j] = shuffled[j], shuffled[i]
-  end
-
-  return shuffled
-end
-
 dofile_once("mods/mystery-spells-and-perks/files/scripts/lib/utils/variable_storage.lua")
 dofile_once("mods/mystery-spells-and-perks/files/scripts/lib/utils/player.lua")
 dofile_once("mods/mystery-spells-and-perks/files/scripts/lib/utils/calculate.lua")
