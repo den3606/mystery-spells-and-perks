@@ -4,7 +4,20 @@ if not mystify_perks then
   return
 end
 
-local custom_name = dofile_once("mods/mystery-spells-and-perks/files/scripts/custom_perk_name.lua")
+SetRandomSeed(1, 2)
+
+local custom_names = {}
+
+local function get_custom_name()
+  if next(custom_names) == nil then
+    custom_names = dofile("mods/mystery-spells-and-perks/files/scripts/custom_perk_name.lua")
+  end
+
+  local index = Random(1, #custom_names)
+  local random_name = custom_names[index]
+  table.remove(custom_names, index)
+  return random_name
+end
 
 local secret_perk = {
   id = "MYSTERY_SECRET_PERK",
@@ -23,7 +36,7 @@ for i = 1, #perk_list do
   local original_func = perk_list[i].func
 
   perk_list[i].func = original_func
-  perk_list[i].ui_name = custom_name.get()
+  perk_list[i].ui_name = get_custom_name()
   perk_list[i].ui_description = secret_perk.ui_description
   perk_list[i].ui_icon = secret_perk.ui_icon
   perk_list[i].perk_icon = secret_perk.perk_icon
