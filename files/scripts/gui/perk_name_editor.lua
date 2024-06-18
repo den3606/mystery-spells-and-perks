@@ -4,6 +4,7 @@ local keycodes = dofile_once("mods/mystery-spells-and-perks/files/scripts/gui/ke
 local VALUES = dofile_once("mods/mystery-spells-and-perks/files/scripts/variables.lua")
 local drawer = dofile_once("mods/mystery-spells-and-perks/files/scripts/gui/drawer.lua")
 local Json = dofile_once("mods/mystery-spells-and-perks/files/scripts/lib/jsonlua/json.lua")
+local dummy_perks = dofile_once("mods/mystery-spells-and-perks/files/scripts/dummy_perks.lua")
 
 local customized_perks = {}
 local sorted_customized_perks = {}
@@ -111,6 +112,30 @@ local function draw_perk_picker(gui)
   GuiBeginScrollContainer(gui, drawer.new_id('perk_picker_gui'), 5, 5, 160, 250)
   GuiLayoutBeginVertical(gui, 0, 0)
 
+  -- ダミー特典を表示する
+  GuiText(gui, 0, 0, GameTextGetTranslatedOrNot("$mystery_spells_and_perks.dummy_perk_title"))
+  for i, dummy_perk in pairs(dummy_perks) do
+    if (i - 1) % 9 == 0 then
+      GuiLayoutBeginHorizontal(gui, 0, 0)
+    end
+
+    local clicked = GuiImageButton(
+      gui, drawer.new_id('perk_' .. dummy_perk.id), 0, 0, "", dummy_perk.perk_icon
+    )
+
+    -- アイコンクリック時に、取得している特典が選択されている場合
+    if clicked and selected_owned_perk and (is_selected_owned_perk or is_selected_all_mystery_perk) then
+      update_perk(selected_owned_perk.perk, dummy_perk)
+    end
+
+    if (i - 1) % 9 == 8 then
+      GuiLayoutEnd(gui)
+      GuiLayoutAddVerticalSpacing(gui, 2)
+    end
+  end
+
+
+  -- バニラ特典を表示する
   GuiText(gui, 0, 0, GameTextGetTranslatedOrNot("$progress_perks"))
   for i, perk in pairs(original_perks) do
     if (i - 1) % 9 == 0 then
