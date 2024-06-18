@@ -1,9 +1,27 @@
 dofile("data/scripts/lib/mod_settings.lua") -- see this file for documentation on some of the features.
 
 local mod_id = "mystery_spells_and_perks"   -- This should match the name of your mod's folder.
-mod_settings_version = 4                    -- This is a magic global that can be used to migrate settings to new mod versions. call mod_settings_get_version() before mod_settings_update() to get the old value.
+mod_settings_version = 5                    -- This is a magic global that can be used to migrate settings to new mod versions. call mod_settings_get_version() before mod_settings_update() to get the old value.
 
 mod_settings = {
+  {
+    id = "spell_editor_shortcut_key",
+    ui_name = "Spell Editor Shortcut Key",
+    ui_description = "Input shortcut key",
+    value_default = "",
+    text_max_length = 1,
+    allowed_characters = "abcdefghijklmnopqrstuvwxyz0123456789",
+    scope = MOD_SETTING_SCOPE_RUNTIME,
+  },
+  {
+    id = "perk_editor_shortcut_key",
+    ui_name = "Perk Editor Shortcut Key",
+    ui_description = "Input shortcut key",
+    value_default = "",
+    text_max_length = 1,
+    allowed_characters = "abcdefghijklmnopqrstuvwxyz0123456789",
+    scope = MOD_SETTING_SCOPE_RUNTIME,
+  },
   {
     id = "show_answers_when_the_game_is_cleared",
     ui_name = "The answer will be given when the game is completed",

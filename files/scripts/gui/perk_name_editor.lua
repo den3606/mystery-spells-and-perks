@@ -1,5 +1,6 @@
 dofile_once("data/scripts/gun/gun_enums.lua")
 dofile_once("mods/mystery-spells-and-perks/files/scripts/lib/utilities.lua")
+local keycodes = dofile_once("mods/mystery-spells-and-perks/files/scripts/gui/keycodes.lua")
 local VALUES = dofile_once("mods/mystery-spells-and-perks/files/scripts/variables.lua")
 local drawer = dofile_once("mods/mystery-spells-and-perks/files/scripts/gui/drawer.lua")
 local Json = dofile_once("mods/mystery-spells-and-perks/files/scripts/lib/jsonlua/json.lua")
@@ -293,6 +294,11 @@ local function draw_editor(gui, editor_status)
 
   if editor_status.is_open_spell_editor then
     show_name_editor = false
+  end
+
+  local setting_keycode = keycodes[tostring(ModSettingGet('mystery_spells_and_perks.perk_editor_shortcut_key'))]
+  if setting_keycode and InputIsKeyJustDown(setting_keycode) then
+    show_name_editor = not show_name_editor
   end
 
   local open_pressed = GuiImageButton(gui, drawer.new_id('perk_editor_button'), 40, 42, "",
