@@ -3,6 +3,7 @@ local keycodes = dofile_once("mods/mystery-spells-and-perks/files/scripts/gui/ke
 local VALUES = dofile_once("mods/mystery-spells-and-perks/files/scripts/variables.lua")
 local drawer = dofile_once("mods/mystery-spells-and-perks/files/scripts/gui/drawer.lua")
 local Json = dofile_once("mods/mystery-spells-and-perks/files/scripts/lib/jsonlua/json.lua")
+local dummy_spells = dofile_once("mods/mystery-spells-and-perks/files/scripts/dummy_spells.lua")
 
 local type_translate_text_keys = {
   [0] = "$inventory_actiontype_projectile",
@@ -116,6 +117,30 @@ local function draw_spell_picker(gui)
   GuiBeginScrollContainer(gui, drawer.new_id('spell_picker_gui'), 5, 5, 360, 250)
   GuiLayoutBeginVertical(gui, 0, 0)
 
+  -- ダミー呪文を表示する
+  GuiText(gui, 0, 0, GameTextGetTranslatedOrNot("$mystery_spells_and_perks.dummy_spell_title"))
+  GuiLayoutAddVerticalSpacing(gui, -2)
+  for i, dummy_spell in ipairs(dummy_spells) do
+    if (i - 1) % 20 == 0 then
+      GuiLayoutBeginHorizontal(gui, 0, 0)
+    end
+
+    local clicked = GuiImageButton(
+      gui, drawer.new_id('sepll_' .. dummy_spell.id), 0, 0, "", dummy_spell.sprite
+    )
+
+    -- アイコンクリック時に、所持呪文が選択されている場合
+    if clicked and selected_owned_spell and (is_selected_wand_spell or is_selected_bag_spell) then
+      update_card(selected_owned_spell.action, dummy_spell)
+    end
+
+    if ((i - 1) % 20 == 19) or i == #dummy_spells then
+      GuiLayoutEnd(gui)
+    end
+  end
+
+
+  -- バニラ呪文を表示する
   local before_type_name = nil
   local already_called_layout_end = false
   for action_type_num, actions_by_type in pairs(original_actions_by_types) do
