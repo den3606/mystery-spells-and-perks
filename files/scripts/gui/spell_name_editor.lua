@@ -188,7 +188,7 @@ local function draw_spell_picker(gui)
   GuiEndScrollContainer(gui)
 end
 
-local function draw_target_spells(title, spell_entity_ids)
+local function draw_target_spells(gui, title, spell_entity_ids)
   local is_selected = false
   GuiText(gui, 0, 0, title)
   for index, spell_entity_id in ipairs(spell_entity_ids) do
@@ -250,8 +250,8 @@ local function draw_owned_spells(gui, wand_spell_entity_ids, inventry_spell_enti
   GuiBeginScrollContainer(gui, drawer.new_id('owned_spells_gui'), 5, 5, 95, 250)
   GuiLayoutBeginVertical(gui, 0, 0)
 
-  is_selected_wand_spell = draw_target_spells("In Wands", wand_spell_entity_ids)
-  is_selected_bag_spell = draw_target_spells("In Bag", inventry_spell_entity_ids)
+  is_selected_wand_spell = draw_target_spells(gui, "In Wands", wand_spell_entity_ids)
+  is_selected_bag_spell = draw_target_spells(gui, "In Bag", inventry_spell_entity_ids)
 
   GuiLayoutEnd(gui)
   GuiEndScrollContainer(gui)
@@ -261,8 +261,8 @@ local function draw_nearby_player_spells(gui, nearby_player_spell_entity_ids, ne
   GuiBeginScrollContainer(gui, drawer.new_id('nearby_player_spells_gui'), 5, 5, 95, 250)
   GuiLayoutBeginVertical(gui, 0, 0)
 
-  is_selected_field_spell = draw_target_spells("Nearby Player", nearby_player_spell_entity_ids)
-  is_selected_field_wands_spell = draw_target_spells("Nearby Player In Wand", nearby_player_spell_in_wands_entity_ids)
+  is_selected_field_spell = draw_target_spells(gui, "Nearby Player", nearby_player_spell_entity_ids)
+  is_selected_field_wands_spell = draw_target_spells(gui, "Nearby Player In Wand", nearby_player_spell_in_wands_entity_ids)
 
   GuiLayoutEnd(gui)
   GuiEndScrollContainer(gui)

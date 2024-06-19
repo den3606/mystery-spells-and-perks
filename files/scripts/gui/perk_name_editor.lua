@@ -212,7 +212,7 @@ local function draw_all_perks(gui)
   GuiEndScrollContainer(gui)
 end
 
-local function draw_target_perks(title, perk_entity_ids)
+local function draw_target_perks(gui, title, perk_entity_ids)
   local is_selected = false
   GuiText(gui, 0, 0, title)
   for index, perk_entity_id in ipairs(perk_entity_ids) do
@@ -269,7 +269,7 @@ local function draw_owned_perks(gui, perk_entity_ids)
   GuiBeginScrollContainer(gui, drawer.new_id('owned_perks_gui'), 5, 5, 95, 250)
   GuiLayoutBeginVertical(gui, 0, 0)
 
-  is_selected_owned_perk = draw_target_perks("Picked Perks", perk_entity_ids)
+  is_selected_owned_perk = draw_target_perks(gui, "Picked Perks", perk_entity_ids)
 
   GuiLayoutEnd(gui)
   GuiEndScrollContainer(gui)
