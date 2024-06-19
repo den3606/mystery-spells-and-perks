@@ -162,7 +162,7 @@ local function draw_perk_picker(gui)
 end
 
 local function draw_all_perks(gui)
-  GuiBeginScrollContainer(gui, drawer.new_id('all_mystery_perks_gui'), 5, 5, 100, 250)
+  GuiBeginScrollContainer(gui, drawer.new_id('all_mystery_perks_gui'), 5, 5, 95, 250)
   GuiLayoutBeginVertical(gui, 0, 0)
 
   local function draw_perks(title)
@@ -213,7 +213,7 @@ local function draw_all_perks(gui)
 end
 
 local function draw_owned_perks(gui, perk_entity_ids)
-  GuiBeginScrollContainer(gui, drawer.new_id('owned_perks_gui'), 5, 5, 100, 250)
+  GuiBeginScrollContainer(gui, drawer.new_id('owned_perks_gui'), 5, 5, 95, 250)
   GuiLayoutBeginVertical(gui, 0, 0)
 
   local function draw_perks(title, perk_entity_ids)
@@ -338,7 +338,7 @@ local function draw_editor(gui, editor_status)
   end
 
   if show_name_editor then
-    GuiLayoutBeginHorizontal(gui, 5, 17)
+    GuiLayoutBeginHorizontal(gui, 2, 17)
     local perk_entities = get_owned_perk_entity_ids(player_entity_id)
     draw_owned_perks(gui, perk_entities)
     draw_all_perks(gui)
