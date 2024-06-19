@@ -12,7 +12,7 @@ local original_perks = {}
 local selected_owned_perk = nil
 local show_name_editor = false
 local is_selected_owned_perk = false
-local is_selected_all_mystery_perk = false
+local is_selected_field_perk = false
 local load_customized_perk = false
 
 local function __load_original_perks()
@@ -124,7 +124,7 @@ local function draw_perk_picker(gui)
     )
 
     -- アイコンクリック時に、取得している特典が選択されている場合
-    if clicked and selected_owned_perk and (is_selected_owned_perk or is_selected_all_mystery_perk) then
+    if clicked and selected_owned_perk and (is_selected_owned_perk or is_selected_field_perk) then
       update_perk(selected_owned_perk.perk, dummy_perk)
     end
 
@@ -147,7 +147,7 @@ local function draw_perk_picker(gui)
     )
 
     -- アイコンクリック時に、取得している特典が選択されている場合
-    if clicked and selected_owned_perk and (is_selected_owned_perk or is_selected_all_mystery_perk) then
+    if clicked and selected_owned_perk and (is_selected_owned_perk or is_selected_field_perk) then
       update_perk(selected_owned_perk.perk, perk)
     end
 
@@ -156,57 +156,6 @@ local function draw_perk_picker(gui)
       GuiLayoutAddVerticalSpacing(gui, 2)
     end
   end
-
-  GuiLayoutEnd(gui)
-  GuiEndScrollContainer(gui)
-end
-
-local function draw_all_perks(gui)
-  GuiBeginScrollContainer(gui, drawer.new_id('all_mystery_perks_gui'), 5, 5, 95, 250)
-  GuiLayoutBeginVertical(gui, 0, 0)
-
-  local function draw_perks(title)
-    local is_selected = false
-    GuiText(gui, 0, 0, title)
-
-    for index, customized_perk in ipairs(sorted_customized_perks) do
-      if customized_perk then
-        GuiLayoutBeginHorizontal(gui, 0, 0)
-        if selected_owned_perk then
-          if (
-                selected_owned_perk.title == title and
-                selected_owned_perk.index == index and
-                selected_owned_perk.perk.ui_name == customized_perk.ui_name
-              ) then
-            GuiImage(gui, drawer.new_id(
-                title .. '_selected' .. index), 0, 0,
-              "mods/mystery-spells-and-perks/files/ui_gfx/select_icon.png", 1, 1, 0
-            )
-            is_selected = true
-          end
-        end
-
-        local clicked_owned_perk = GuiImageButton(
-          gui, drawer.new_id(title .. '_owned_perk_' .. index), 0, 0,
-          GameTextGetTranslatedOrNot(customized_perk.ui_name) or "", customized_perk.perk_icon
-        )
-
-        if clicked_owned_perk then
-          selected_owned_perk = {
-            title = title,
-            index = index,
-            perk = customized_perk
-          }
-        end
-
-        GuiLayoutEnd(gui);
-        GuiLayoutAddVerticalSpacing(gui, 1)
-      end
-    end
-    return is_selected
-  end
-
-  is_selected_all_mystery_perk = draw_perks("All Mytery Perks")
 
   GuiLayoutEnd(gui)
   GuiEndScrollContainer(gui)
@@ -265,11 +214,21 @@ local function draw_target_perks(gui, title, perk_entity_ids)
   return is_selected
 end
 
+local function draw_nearby_player_perks(gui, perk_entity_ids)
+  GuiBeginScrollContainer(gui, drawer.new_id('all_mystery_perks_gui'), 5, 5, 95, 250)
+  GuiLayoutBeginVertical(gui, 0, 0)
+
+  is_selected_field_perk = draw_target_perks(gui, "Nearby Player", perk_entity_ids)
+
+  GuiLayoutEnd(gui)
+  GuiEndScrollContainer(gui)
+end
+
 local function draw_owned_perks(gui, perk_entity_ids)
   GuiBeginScrollContainer(gui, drawer.new_id('owned_perks_gui'), 5, 5, 95, 250)
   GuiLayoutBeginVertical(gui, 0, 0)
 
-  is_selected_owned_perk = draw_target_perks(gui, "Picked Perks", perk_entity_ids)
+  is_selected_owned_perk = draw_target_perks(gui, "Your Picked", perk_entity_ids)
 
   GuiLayoutEnd(gui)
   GuiEndScrollContainer(gui)
@@ -288,6 +247,14 @@ local function get_owned_perk_entity_ids(player_entity_id)
 
   return perk_entity_ids
 end
+
+local function get_nearby_player_perk_entity_ids(player_entity_id)
+  local x, y = EntityGetTransform(player_entity_id)
+  local nearby_player_perks = EntityGetInRadiusWithTag(x, y, 40, 'item_perk') or {}
+
+  return nearby_player_perks
+end
+
 
 local function update_card_by_kolmi_kill()
   local need_force_update = ModSettingGet(
@@ -339,8 +306,9 @@ local function draw_editor(gui, editor_status)
 
   if show_name_editor then
     GuiLayoutBeginHorizontal(gui, 2, 17)
+    local nearby_player_perk_entities = get_nearby_player_perk_entity_ids(player_entity_id)
     local perk_entities = get_owned_perk_entity_ids(player_entity_id)
-    draw_all_perks(gui)
+    draw_nearby_player_perks(gui, nearby_player_perk_entities)
     draw_owned_perks(gui, perk_entities)
     draw_perk_picker(gui)
     GuiLayoutEnd(gui)
