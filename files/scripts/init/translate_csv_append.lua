@@ -56,7 +56,7 @@ for i, perk_desc in ipairs(perk_desc_lines) do
   end
 
   local maybe_correct_perk_desc = ""
-  if math.random(1, 10) <= 8 then
+  if math.random(1, 10) <= 7 then
     maybe_correct_perk_desc = perk_desc_lines[i]
   else
     maybe_correct_perk_desc = perk_desc_lines[target_index]
