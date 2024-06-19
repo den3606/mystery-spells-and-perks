@@ -340,8 +340,8 @@ local function draw_editor(gui, editor_status)
   if show_name_editor then
     GuiLayoutBeginHorizontal(gui, 2, 17)
     local perk_entities = get_owned_perk_entity_ids(player_entity_id)
-    draw_owned_perks(gui, perk_entities)
     draw_all_perks(gui)
+    draw_owned_perks(gui, perk_entities)
     draw_perk_picker(gui)
     GuiLayoutEnd(gui)
   end
