@@ -37,7 +37,7 @@ for i = 1, #perk_list do
 
   perk_list[i].func = original_func
   perk_list[i].ui_name = get_custom_name()
-  perk_list[i].ui_description = secret_perk.ui_description
   perk_list[i].ui_icon = secret_perk.ui_icon
+  perk_list[i].ui_description = '$mystery_spells_and_perks' .. string.gsub(perk_list[i].ui_description, '%$', ".")
   perk_list[i].perk_icon = secret_perk.perk_icon
 end

@@ -19,6 +19,10 @@ local perk_name_editor = dofile_once(
 -- 設定初期化
 ModSettingSet(VALUES.GLOBAL_GUI_ID, 0)
 
+function OnModPreInit()
+  dofile_once("mods/mystery-spells-and-perks/files/scripts/init/translate_csv_append.lua")
+end
+
 function OnModPostInit()
   dofile_once("mods/mystery-spells-and-perks/files/scripts/init/xml_override.lua")
 end
@@ -40,10 +44,5 @@ function OnWorldPostUpdate()
   editor_status.is_open_spell_editor = spell_name_editor.draw(gui, editor_status)
   editor_status.is_open_perk_editor = perk_name_editor.draw(gui, editor_status)
 end
-
-local content = ModTextFileGetContent("data/translations/common.csv")
-local mystery_spells_and_perks_content = ModTextFileGetContent(
-  "mods/mystery-spells-and-perks/files/translations/common.csv")
-ModTextFileSetContent("data/translations/common.csv", content .. mystery_spells_and_perks_content)
 
 print("mystery-spells-and-perks loaded")
