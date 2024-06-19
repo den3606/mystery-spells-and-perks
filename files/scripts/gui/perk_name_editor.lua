@@ -12,7 +12,7 @@ local original_perks = {}
 local selected_owned_perk = nil
 local show_name_editor = false
 local is_selected_owned_perk = false
-local is_selected_all_mystery_perk = false
+local is_selected_field_perk = false
 local load_customized_perk = false
 
 local function __load_original_perks()
@@ -124,7 +124,7 @@ local function draw_perk_picker(gui)
     )
 
     -- アイコンクリック時に、取得している特典が選択されている場合
-    if clicked and selected_owned_perk and (is_selected_owned_perk or is_selected_all_mystery_perk) then
+    if clicked and selected_owned_perk and (is_selected_owned_perk or is_selected_field_perk) then
       update_perk(selected_owned_perk.perk, dummy_perk)
     end
 
@@ -147,7 +147,7 @@ local function draw_perk_picker(gui)
     )
 
     -- アイコンクリック時に、取得している特典が選択されている場合
-    if clicked and selected_owned_perk and (is_selected_owned_perk or is_selected_all_mystery_perk) then
+    if clicked and selected_owned_perk and (is_selected_owned_perk or is_selected_field_perk) then
       update_perk(selected_owned_perk.perk, perk)
     end
 
@@ -218,8 +218,7 @@ local function draw_nearby_player_perks(gui, perk_entity_ids)
   GuiBeginScrollContainer(gui, drawer.new_id('all_mystery_perks_gui'), 5, 5, 95, 250)
   GuiLayoutBeginVertical(gui, 0, 0)
 
-  -- TODO:変数名変える
-  is_selected_all_mystery_perk = draw_target_perks(gui, "Nearby Player", perk_entity_ids)
+  is_selected_field_perk = draw_target_perks(gui, "Nearby Player", perk_entity_ids)
 
   GuiLayoutEnd(gui)
   GuiEndScrollContainer(gui)
