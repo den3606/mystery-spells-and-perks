@@ -16,6 +16,17 @@ local type_translate_text_keys = {
   [7] = "$inventory_actiontype_passive",
 }
 
+local item_bg_paths = {
+  [0] = "data/ui_gfx/inventory/item_bg_projectile.png",
+  [1] = "data/ui_gfx/inventory/item_bg_static_projectile.png",
+  [2] = "data/ui_gfx/inventory/item_bg_modifier.png",
+  [3] = "data/ui_gfx/inventory/item_bg_draw_many.png",
+  [4] = "data/ui_gfx/inventory/item_bg_material.png",
+  [5] = "data/ui_gfx/inventory/item_bg_other.png",
+  [6] = "data/ui_gfx/inventory/item_bg_utility.png",
+  [7] = "data/ui_gfx/inventory/item_bg_passive.png",
+}
+
 local customized_actions = {}
 local original_actions_by_types = {}
 local selected_owned_spell = nil
@@ -229,6 +240,13 @@ local function draw_target_spells(gui, title, spell_entity_ids)
           gui, drawer.new_id(title .. '_owned_spell_' .. index), 0, 0,
           GameTextGetTranslatedOrNot(customized_action.name) or "", customized_action.sprite
         )
+        GuiZSet(gui, 1)
+
+
+        GuiImage(gui, drawer.new_id(title .. title .. '_owned_spell_bg_' .. index), -20, -2,
+          item_bg_paths[customized_action.type], 1, 1, 0
+        )
+        GuiZSet(gui, 0)
 
         if clicked_owned_spell then
           selected_owned_spell = {
@@ -239,7 +257,7 @@ local function draw_target_spells(gui, title, spell_entity_ids)
         end
 
         GuiLayoutEnd(gui);
-        GuiLayoutAddVerticalSpacing(gui, 1)
+        GuiLayoutAddVerticalSpacing(gui, -3)
       end
     end
   end
