@@ -162,7 +162,7 @@ local function draw_perk_picker(gui)
 end
 
 local function draw_all_perks(gui)
-  GuiBeginScrollContainer(gui, drawer.new_id('all_mystery_perks_gui'), 5, 5, 100, 250)
+  GuiBeginScrollContainer(gui, drawer.new_id('all_mystery_perks_gui'), 5, 5, 95, 250)
   GuiLayoutBeginVertical(gui, 0, 0)
 
   local function draw_perks(title)
@@ -212,64 +212,64 @@ local function draw_all_perks(gui)
   GuiEndScrollContainer(gui)
 end
 
-local function draw_owned_perks(gui, perk_entity_ids)
-  GuiBeginScrollContainer(gui, drawer.new_id('owned_perks_gui'), 5, 5, 100, 250)
-  GuiLayoutBeginVertical(gui, 0, 0)
-
-  local function draw_perks(title, perk_entity_ids)
-    local is_selected = false
-    GuiText(gui, 0, 0, title)
-    for index, perk_entity_id in ipairs(perk_entity_ids) do
-      local perk_id = GetInternalVariableValue(perk_entity_id, "perk_id", "value_string")
-      if perk_id then
-        -- entityをcustomized_actionへ変換する
-        local customized_perk = (function()
-          for _, value in ipairs(customized_perks) do
-            if perk_id == value.id then
-              return value
-            end
+local function draw_target_perks(title, perk_entity_ids)
+  local is_selected = false
+  GuiText(gui, 0, 0, title)
+  for index, perk_entity_id in ipairs(perk_entity_ids) do
+    local perk_id = GetInternalVariableValue(perk_entity_id, "perk_id", "value_string")
+    if perk_id then
+      -- entityをcustomized_actionへ変換する
+      local customized_perk = (function()
+        for _, value in ipairs(customized_perks) do
+          if perk_id == value.id then
+            return value
           end
-          return nil
-        end)()
-
-        if customized_perk then
-          GuiLayoutBeginHorizontal(gui, 0, 0)
-          if selected_owned_perk then
-            if (
-                  selected_owned_perk.title == title and
-                  selected_owned_perk.index == index and
-                  selected_owned_perk.perk.ui_name == customized_perk.ui_name
-                ) then
-              GuiImage(gui, drawer.new_id(
-                  title .. '_selected' .. index), 0, 0,
-                "mods/mystery-spells-and-perks/files/ui_gfx/select_icon.png", 1, 1, 0
-              )
-              is_selected = true
-            end
-          end
-
-          local clicked_owned_perk = GuiImageButton(
-            gui, drawer.new_id(title .. '_owned_perk_' .. index), 0, 0,
-            GameTextGetTranslatedOrNot(customized_perk.ui_name) or "", customized_perk.perk_icon
-          )
-
-          if clicked_owned_perk then
-            selected_owned_perk = {
-              title = title,
-              index = index,
-              perk = customized_perk
-            }
-          end
-
-          GuiLayoutEnd(gui);
-          GuiLayoutAddVerticalSpacing(gui, 1)
         end
+        return nil
+      end)()
+
+      if customized_perk then
+        GuiLayoutBeginHorizontal(gui, 0, 0)
+        if selected_owned_perk then
+          if (
+                selected_owned_perk.title == title and
+                selected_owned_perk.index == index and
+                selected_owned_perk.perk.ui_name == customized_perk.ui_name
+              ) then
+            GuiImage(gui, drawer.new_id(
+                title .. '_selected' .. index), 0, 0,
+              "mods/mystery-spells-and-perks/files/ui_gfx/select_icon.png", 1, 1, 0
+            )
+            is_selected = true
+          end
+        end
+
+        local clicked_owned_perk = GuiImageButton(
+          gui, drawer.new_id(title .. '_owned_perk_' .. index), 0, 0,
+          GameTextGetTranslatedOrNot(customized_perk.ui_name) or "", customized_perk.perk_icon
+        )
+
+        if clicked_owned_perk then
+          selected_owned_perk = {
+            title = title,
+            index = index,
+            perk = customized_perk
+          }
+        end
+
+        GuiLayoutEnd(gui);
+        GuiLayoutAddVerticalSpacing(gui, 1)
       end
     end
-    return is_selected
   end
+  return is_selected
+end
 
-  is_selected_owned_perk = draw_perks("Picked Perks", perk_entity_ids)
+local function draw_owned_perks(gui, perk_entity_ids)
+  GuiBeginScrollContainer(gui, drawer.new_id('owned_perks_gui'), 5, 5, 95, 250)
+  GuiLayoutBeginVertical(gui, 0, 0)
+
+  is_selected_owned_perk = draw_target_perks("Picked Perks", perk_entity_ids)
 
   GuiLayoutEnd(gui)
   GuiEndScrollContainer(gui)
@@ -338,10 +338,10 @@ local function draw_editor(gui, editor_status)
   end
 
   if show_name_editor then
-    GuiLayoutBeginHorizontal(gui, 5, 17)
+    GuiLayoutBeginHorizontal(gui, 2, 17)
     local perk_entities = get_owned_perk_entity_ids(player_entity_id)
-    draw_owned_perks(gui, perk_entities)
     draw_all_perks(gui)
+    draw_owned_perks(gui, perk_entities)
     draw_perk_picker(gui)
     GuiLayoutEnd(gui)
   end

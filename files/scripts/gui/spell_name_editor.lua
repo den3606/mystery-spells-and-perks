@@ -22,6 +22,8 @@ local selected_owned_spell = nil
 local show_name_editor = false
 local is_selected_wand_spell = false
 local is_selected_bag_spell = false
+local is_selected_field_spell = false
+local is_selected_field_wands_spell = false
 local load_customized_action = false
 
 
@@ -130,7 +132,9 @@ local function draw_spell_picker(gui)
     )
 
     -- アイコンクリック時に、所持呪文が選択されている場合
-    if clicked and selected_owned_spell and (is_selected_wand_spell or is_selected_bag_spell) then
+    local is_selected_target_spell =
+        is_selected_wand_spell or is_selected_bag_spell or is_selected_field_spell or is_selected_field_wands_spell
+    if clicked and selected_owned_spell and is_selected_target_spell then
       update_card(selected_owned_spell.action, dummy_spell)
     end
 
@@ -164,7 +168,9 @@ local function draw_spell_picker(gui)
       )
 
       -- アイコンクリック時に、所持呪文が選択されている場合
-      if clicked and selected_owned_spell and (is_selected_wand_spell or is_selected_bag_spell) then
+      local is_selected_target_spell =
+          is_selected_wand_spell or is_selected_bag_spell or is_selected_field_spell or is_selected_field_wands_spell
+      if clicked and selected_owned_spell and is_selected_target_spell then
         update_card(selected_owned_spell.action, action)
       end
 
@@ -182,70 +188,81 @@ local function draw_spell_picker(gui)
   GuiEndScrollContainer(gui)
 end
 
-local function draw_owned_spells(gui, wand_spell_entity_ids, inventry_spell_entity_ids)
-  GuiBeginScrollContainer(gui, drawer.new_id('owned_spells_gui'), 5, 5, 100, 250)
-  GuiLayoutBeginVertical(gui, 0, 0)
+local function draw_target_spells(title, spell_entity_ids)
+  local is_selected = false
+  GuiText(gui, 0, 0, title)
+  for index, spell_entity_id in ipairs(spell_entity_ids) do
+    local item_action_component_id = EntityGetFirstComponentIncludingDisabled(
+      spell_entity_id, "ItemActionComponent"
+    )
 
-  local function draw_spells(title, spell_entity_ids)
-    local is_selected = false
-    GuiText(gui, 0, 0, title)
-    for index, spell_entity_id in ipairs(spell_entity_ids) do
-      local item_action_component_id = EntityGetFirstComponentIncludingDisabled(
-        spell_entity_id, "ItemActionComponent"
-      )
+    if item_action_component_id then
+      local action_id = ComponentGetValue2(item_action_component_id, "action_id");
 
-      if item_action_component_id then
-        local action_id = ComponentGetValue2(item_action_component_id, "action_id");
-
-        -- entityをcustomized_actionへ変換する
-        local customized_action = (function()
-          for _, value in ipairs(customized_actions) do
-            if action_id == value.id then
-              return value
-            end
+      -- entityをcustomized_actionへ変換する
+      local customized_action = (function()
+        for _, value in ipairs(customized_actions) do
+          if action_id == value.id then
+            return value
           end
-          return nil
-        end)()
-
-        if customized_action then
-          GuiLayoutBeginHorizontal(gui, 0, 0)
-          if selected_owned_spell then
-            if (
-                  selected_owned_spell.title == title and
-                  selected_owned_spell.index == index and
-                  selected_owned_spell.action.name == customized_action.name
-                ) then
-              GuiImage(gui, drawer.new_id(
-                  title .. '_selected' .. index), 0, 0,
-                "mods/mystery-spells-and-perks/files/ui_gfx/select_icon.png", 1, 1, 0
-              )
-              is_selected = true
-            end
-          end
-
-          local clicked_owned_spell = GuiImageButton(
-            gui, drawer.new_id(title .. '_owned_spell_' .. index), 0, 0,
-            GameTextGetTranslatedOrNot(customized_action.name) or "", customized_action.sprite
-          )
-
-          if clicked_owned_spell then
-            selected_owned_spell = {
-              title = title,
-              index = index,
-              action = customized_action
-            }
-          end
-
-          GuiLayoutEnd(gui);
-          GuiLayoutAddVerticalSpacing(gui, 1)
         end
+        return nil
+      end)()
+
+      if customized_action then
+        GuiLayoutBeginHorizontal(gui, 0, 0)
+        if selected_owned_spell then
+          if (
+                selected_owned_spell.title == title and
+                selected_owned_spell.index == index and
+                selected_owned_spell.action.name == customized_action.name
+              ) then
+            GuiImage(gui, drawer.new_id(
+                title .. '_selected' .. index), 0, 0,
+              "mods/mystery-spells-and-perks/files/ui_gfx/select_icon.png", 1, 1, 0
+            )
+            is_selected = true
+          end
+        end
+
+        local clicked_owned_spell = GuiImageButton(
+          gui, drawer.new_id(title .. '_owned_spell_' .. index), 0, 0,
+          GameTextGetTranslatedOrNot(customized_action.name) or "", customized_action.sprite
+        )
+
+        if clicked_owned_spell then
+          selected_owned_spell = {
+            title = title,
+            index = index,
+            action = customized_action
+          }
+        end
+
+        GuiLayoutEnd(gui);
+        GuiLayoutAddVerticalSpacing(gui, 1)
       end
     end
-    return is_selected
   end
+  return is_selected
+end
 
-  is_selected_wand_spell = draw_spells("In Wands", wand_spell_entity_ids)
-  is_selected_bag_spell = draw_spells("In Bag", inventry_spell_entity_ids)
+local function draw_owned_spells(gui, wand_spell_entity_ids, inventry_spell_entity_ids)
+  GuiBeginScrollContainer(gui, drawer.new_id('owned_spells_gui'), 5, 5, 95, 250)
+  GuiLayoutBeginVertical(gui, 0, 0)
+
+  is_selected_wand_spell = draw_target_spells("In Wands", wand_spell_entity_ids)
+  is_selected_bag_spell = draw_target_spells("In Bag", inventry_spell_entity_ids)
+
+  GuiLayoutEnd(gui)
+  GuiEndScrollContainer(gui)
+end
+
+local function draw_nearby_player_spells(gui, nearby_player_spell_entity_ids, nearby_player_spell_in_wands_entity_ids)
+  GuiBeginScrollContainer(gui, drawer.new_id('nearby_player_spells_gui'), 5, 5, 95, 250)
+  GuiLayoutBeginVertical(gui, 0, 0)
+
+  is_selected_field_spell = draw_target_spells("Nearby Player", nearby_player_spell_entity_ids)
+  is_selected_field_wands_spell = draw_target_spells("Nearby Player In Wand", nearby_player_spell_in_wands_entity_ids)
 
   GuiLayoutEnd(gui)
   GuiEndScrollContainer(gui)
@@ -280,6 +297,43 @@ local function get_owned_spell_entity_ids(player_entity_id)
 
   return wand_spells, inventry_spells
 end
+
+local function get_nearby_player_spell_entity_ids(player_entity_id)
+  local x, y = EntityGetTransform(player_entity_id)
+
+  local nearby_player_spells = EntityGetInRadiusWithTag(x, y, 20, 'card_action') or {}
+  local nearby_player_wands = EntityGetInRadiusWithTag(x, y, 20, 'wand') or {}
+  if next(nearby_player_spells) == nil and next(nearby_player_wands) == nil then
+    return {}, {}
+  end
+
+  local no_parent_entity_id = 0
+
+  -- fieldにあるスペルのみ取得する
+  for index = #nearby_player_spells, 1, -1 do
+    local nearby_player_wand = nearby_player_spells[index]
+    local parent_entity_id = EntityGetParent(nearby_player_wand)
+    if parent_entity_id ~= no_parent_entity_id then
+      table.remove(nearby_player_spells, index)
+    end
+  end
+
+  -- フィールドにあるwandsのスペルを取得する
+  local nearby_player_spells_in_wands = {}
+  for index = #nearby_player_wands, 1, -1 do
+    local nearby_player_wand = nearby_player_wands[index]
+    local parent_entity_id = EntityGetParent(nearby_player_wand)
+    if parent_entity_id == no_parent_entity_id then
+      local spells = EntityGetAllChildren(nearby_player_wand, 'card_action') or {}
+      for _, spell in ipairs(spells) do
+        table.insert(nearby_player_spells_in_wands, spell)
+      end
+    end
+  end
+
+  return nearby_player_spells, nearby_player_spells_in_wands
+end
+
 
 local function update_card_by_wand_fire()
   for _, actions_by_type in pairs(original_actions_by_types) do
@@ -347,11 +401,17 @@ local function draw_editor(gui, editor_status)
   end
 
   if show_name_editor then
-    GuiLayoutBeginHorizontal(gui, 5, 17)
-    local wand_spell_entity_ids, inventry_spell_entity_ids = get_owned_spell_entity_ids(
-      player_entity_id)
+    GuiLayoutBeginHorizontal(gui, 2, 17)
+
+    local wand_spell_entity_ids, inventry_spell_entity_ids =
+        get_owned_spell_entity_ids(player_entity_id)
+    local nearby_spell_entity_ids, nearby_spell_entity_ids_in_wands =
+        get_nearby_player_spell_entity_ids(player_entity_id)
+
+    draw_nearby_player_spells(gui, nearby_spell_entity_ids, nearby_spell_entity_ids_in_wands)
     draw_owned_spells(gui, wand_spell_entity_ids, inventry_spell_entity_ids)
     draw_spell_picker(gui)
+
     GuiLayoutEnd(gui)
   end
 
