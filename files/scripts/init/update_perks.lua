@@ -36,7 +36,7 @@ local function update_perk_if_needed()
 
       if customized_action_json and customized_action_json ~= "" then
         local customized_action = Json.decode(string.gsub(customized_action_json, "'", '"'))
-        replace_spell_entity(card_entity_id, customized_action.sprite)
+        replace_perk_entity(card_entity_id, customized_action.sprite)
         table.remove(card_entity_ids, index)
         ModSettingSet(VALUES.NEED_UPDATE_SPELL_ENTITIES, Json.encode(card_entity_ids))
       end
