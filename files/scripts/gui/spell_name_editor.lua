@@ -89,6 +89,10 @@ end
 
 local function update_card(target_action, override_action)
   -- カスタマイズリストを更新する
+  -- NOTE:
+  -- Perkのようにdescriptionによるヒントを実装する場合は、
+  -- override_actionのdescriptionをcustomized_actionのdescriptionに書き換える必要がある
+  -- 現行は選択した呪文説明文で上書きしているが、これをすると元のランダムで生成するmaybeテキストが上書きされてしまう。
   for _, customized_action in ipairs(customized_actions) do
     if target_action.id == customized_action.id then
       customized_action.sprite = override_action.sprite
@@ -236,7 +240,7 @@ local function draw_target_spells(gui, title, spell_entity_ids)
           end
         end
 
-        local clicked_owned_spell = GuiImageButton(
+        local left_clicked_owned_spell, right_clicked_owned_spell = GuiImageButton(
           gui, drawer.new_id(title .. '_owned_spell_' .. index), 0, 0,
           GameTextGetTranslatedOrNot(customized_action.name) or "", customized_action.sprite
         )
@@ -248,12 +252,16 @@ local function draw_target_spells(gui, title, spell_entity_ids)
         )
         GuiZSet(gui, 0)
 
-        if clicked_owned_spell then
+        if left_clicked_owned_spell then
           selected_owned_spell = {
             title = title,
             index = index,
             action = customized_action
           }
+        end
+
+        if right_clicked_owned_spell then
+          update_card(customized_action, dummy_spells[1])
         end
 
         GuiLayoutEnd(gui);

@@ -66,6 +66,7 @@ local function update_perk(target_perk, override_perk)
     if target_perk.id == customized_perk.id then
       customized_perk.ui_icon = override_perk.ui_icon
       customized_perk.perk_icon = override_perk.perk_icon
+      override_perk.ui_description = customized_perk.ui_description
       GlobalsSetValue(VALUES.GLOBAL_PERK_PREFIX_KEY .. customized_perk.id,
         string.gsub(Json.encode(customized_perk), '"', "'"))
     end
@@ -193,17 +194,21 @@ local function draw_target_perks(gui, title, perk_entity_ids)
           end
         end
 
-        local clicked_owned_perk = GuiImageButton(
+        local left_clicked_owned_perk, right_clicked_owned_perk = GuiImageButton(
           gui, drawer.new_id(title .. '_owned_perk_' .. index), 0, 0,
           GameTextGetTranslatedOrNot(customized_perk.ui_name) or "", customized_perk.perk_icon
         )
 
-        if clicked_owned_perk then
+        if left_clicked_owned_perk then
           selected_owned_perk = {
             title = title,
             index = index,
             perk = customized_perk
           }
+        end
+
+        if right_clicked_owned_perk then
+          update_perk(customized_perk, dummy_perks[1])
         end
 
         GuiLayoutEnd(gui);
