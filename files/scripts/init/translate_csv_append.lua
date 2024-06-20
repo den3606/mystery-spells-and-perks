@@ -71,7 +71,6 @@ local function append_to_translate_csv()
 
   local append_translations = {}
   for index, perk_desc in ipairs(perk_desc_lines) do
-    print(perk_desc)
     local maybe_correct_perk_desc      = pick_maybe_correct_perk_description(index, perk_desc_lines)
     local splited_translate_keys       = split(perk_desc, ",")
     local maybe_correct_translate_keys = split(maybe_correct_perk_desc, ",")
