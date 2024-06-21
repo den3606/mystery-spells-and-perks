@@ -1,6 +1,5 @@
 dofile_once("mods/mystery-spells-and-perks/files/scripts/lib/utilities.lua")
 local VALUES = dofile_once("mods/mystery-spells-and-perks/files/scripts/variables.lua")
-local spells = dofile_once("mods/mystery-spells-and-perks/files/scripts/init/update_spells.lua")
 
 print("mystery-spells-and-perks load")
 
@@ -25,6 +24,7 @@ end
 
 function OnModPostInit()
   dofile_once("mods/mystery-spells-and-perks/files/scripts/init/xml_override.lua")
+  dofile_once("mods/mystery-spells-and-perks/files/scripts/init/lua_file_append.lua")
 end
 
 function OnWorldInitialized()
@@ -35,10 +35,6 @@ function OnWorldPreUpdate()
 end
 
 function OnWorldPostUpdate()
-  if GameGetFrameNum() % 30 == 0 then
-    spells.update_if_needed()
-  end
-
   GuiStartFrame(gui)
 
   editor_status.is_open_spell_editor = spell_name_editor.draw(gui, editor_status)
