@@ -223,7 +223,7 @@ local function draw_nearby_player_perks(gui, perk_entity_ids)
   GuiBeginScrollContainer(gui, drawer.new_id('all_mystery_perks_gui'), 5, 5, 95, 250)
   GuiLayoutBeginVertical(gui, 0, 0)
 
-  is_selected_field_perk = draw_target_perks(gui, "Nearby Player", perk_entity_ids)
+  is_selected_field_perk = draw_target_perks(gui, GameTextGet("$mystery_spells_and_perks.nearby_player_perks"), perk_entity_ids)
 
   GuiLayoutEnd(gui)
   GuiEndScrollContainer(gui)
@@ -233,7 +233,7 @@ local function draw_owned_perks(gui, perk_entity_ids)
   GuiBeginScrollContainer(gui, drawer.new_id('owned_perks_gui'), 5, 5, 95, 250)
   GuiLayoutBeginVertical(gui, 0, 0)
 
-  is_selected_owned_perk = draw_target_perks(gui, "Your Picked", perk_entity_ids)
+  is_selected_owned_perk = draw_target_perks(gui, GameTextGet("$mystery_spells_and_perks.your_picked_perks"), perk_entity_ids)
 
   GuiLayoutEnd(gui)
   GuiEndScrollContainer(gui)
@@ -300,9 +300,9 @@ local function draw_editor(gui, editor_status)
 
   local open_pressed = GuiImageButton(gui, drawer.new_id('perk_editor_button'), 40, 42, "",
     "mods/mystery-spells-and-perks/files/ui_gfx/icon-16-perk-button.png")
-  local open_tooltip = "Show Perk Tag Editor"
+  local open_tooltip = GameTextGet("$mystery_spells_and_perks.show_perk_tag_editor")
   if (show_name_editor) then
-    open_tooltip = "Hide Perk Tag Editor"
+    open_tooltip = GameTextGet("$mystery_spells_and_perks.hide_perk_tag_editor")
   end
   GuiTooltip(gui, open_tooltip, "")
   if (open_pressed) then

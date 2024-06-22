@@ -276,8 +276,8 @@ local function draw_owned_spells(gui, wand_spell_entity_ids, inventry_spell_enti
   GuiBeginScrollContainer(gui, drawer.new_id('owned_spells_gui'), 5, 5, 95, 250)
   GuiLayoutBeginVertical(gui, 0, 0)
 
-  is_selected_wand_spell = draw_target_spells(gui, "In Wands", wand_spell_entity_ids)
-  is_selected_bag_spell = draw_target_spells(gui, "In Bag", inventry_spell_entity_ids)
+  is_selected_wand_spell = draw_target_spells(gui, GameTextGet("$mystery_spells_and_perks.spells_in_wands"), wand_spell_entity_ids)
+  is_selected_bag_spell = draw_target_spells(gui, GameTextGet("$mystery_spells_and_perks.spells_in_bag"), inventry_spell_entity_ids)
 
   GuiLayoutEnd(gui)
   GuiEndScrollContainer(gui)
@@ -287,8 +287,10 @@ local function draw_nearby_player_spells(gui, nearby_player_spell_entity_ids, ne
   GuiBeginScrollContainer(gui, drawer.new_id('nearby_player_spells_gui'), 5, 5, 95, 250)
   GuiLayoutBeginVertical(gui, 0, 0)
 
-  is_selected_field_spell = draw_target_spells(gui, "Nearby Player", nearby_player_spell_entity_ids)
-  is_selected_field_wands_spell = draw_target_spells(gui, "Nearby Player In Wand", nearby_player_spell_in_wands_entity_ids)
+  is_selected_field_spell = draw_target_spells(gui, GameTextGet("$mystery_spells_and_perks.nearby_player_spells"),
+    nearby_player_spell_entity_ids)
+  is_selected_field_wands_spell = draw_target_spells(gui, GameTextGet("$mystery_spells_and_perks.nearby_player_spells_in_wand"),
+    nearby_player_spell_in_wands_entity_ids)
 
   GuiLayoutEnd(gui)
   GuiEndScrollContainer(gui)
@@ -417,9 +419,9 @@ local function draw_editor(gui, editor_status)
 
   local open_pressed = GuiImageButton(gui, drawer.new_id('spell_editor_button'), 21, 42, "",
     "mods/mystery-spells-and-perks/files/ui_gfx/icon-16-sepll-button.png")
-  local open_tooltip = "Show Spell Tag Editor"
+  local open_tooltip = GameTextGet("$mystery_spells_and_perks.show_spell_tag_editor")
   if (show_name_editor) then
-    open_tooltip = "Hide Spell Tag Editor"
+    open_tooltip = GameTextGet("$mystery_spells_and_perks.hide_spell_tag_editor")
   end
   GuiTooltip(gui, open_tooltip, "")
   if (open_pressed) then
