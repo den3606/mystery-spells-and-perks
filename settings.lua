@@ -57,7 +57,7 @@ local settings_text = {
   perk_editor_shortcut_key = {
     ui_name = {
       en = "Perk Editor Shortcut Key",
-      ja = "呪文エディタショートカットキー",
+      ja = "特典エディタショートカットキー",
     },
     ui_description = {
       en = "Input shortcut key(a-z0-9)",
