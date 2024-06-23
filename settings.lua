@@ -86,11 +86,11 @@ local settings_text = {
   },
   mystify_perks = {
     ui_name = {
-      en = "Park will be made into a mystery",
+      en = "Perk will be made into a mystery",
       ja = "特典をシークレットにする",
     },
     ui_description = {
-      en = "Mystify the Parks",
+      en = "Mystify the Perks",
       ja = "特典のシークレット化",
     },
   },
