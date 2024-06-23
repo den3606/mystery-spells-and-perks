@@ -81,7 +81,7 @@ local function update_perk(target_perk, override_perk)
   end
 
   -- プレイヤー、敵キャラクター等で保持されているパークを書き換える
-  for _, perk_entity_id in ipairs(EntityGetWithTag("perk_entity" or {})) do
+  for _, perk_entity_id in ipairs(EntityGetWithTag("mystery-spells-and-perks.perk_icon_entity" or {})) do
     local ui_icon_compoennt_id = EntityGetFirstComponentIncludingDisabled(perk_entity_id,
       "UIIconComponent")
 
@@ -242,7 +242,7 @@ end
 local function get_owned_perk_entity_ids(player_entity_id)
   local perk_entity_ids = {}
 
-  for _, perk_entity_id in ipairs(EntityGetAllChildren(player_entity_id, "perk_entity") or {}) do
+  for _, perk_entity_id in ipairs(EntityGetAllChildren(player_entity_id, "mystery-spells-and-perks.perk_icon_entity") or {}) do
     local ui_icon_compoennt_id = EntityGetFirstComponentIncludingDisabled(perk_entity_id,
       "UIIconComponent")
     if ui_icon_compoennt_id then
